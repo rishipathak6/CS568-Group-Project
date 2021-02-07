@@ -3,15 +3,9 @@
 #include <sstream>  //istringstream
 #include <iostream> // cout
 #include <fstream>  // ifstream
+#include <bits/stdc++.h>
 
 using namespace std;
-
-// Struct of Cluster has an id of the cluster and a vector storing the indexes of points in it
-struct cluster
-{
-    int id;
-    vector<int> cluster_data_index;
-};
 
 // Function to parse a CSV file into a 2D string array
 vector<vector<string>> parse2DCsvFile(string inputFileName)
@@ -57,7 +51,7 @@ vector<vector<string>> parse2DCsvFile(string inputFileName)
     if (!inputFile.eof())
     {
         cerr << "Could not read file " << inputFileName << "\n";
-        __throw_invalid_argument("File not found.");
+        throw invalid_argument("File not found.");
     }
 
     return data;
@@ -69,7 +63,7 @@ double j_cofficient(vector<string> data_point1, vector<string> data_point2)
     int denominator = data_point1.size();
     int numerator = 0;
 
-    for (int i = 1; i < denominator; i++)
+    for (int i = 2; i < denominator; i++)
     {
         if (data_point1[i] == data_point2[i])
         {
@@ -77,13 +71,15 @@ double j_cofficient(vector<string> data_point1, vector<string> data_point2)
         }
     }
 
-    return ((1.0 * numerator) / (denominator - 1));
+    return ((1.0 * numerator) / (denominator - 2));
 }
 
 // Function to create adjacency matrix from data
 // An entry in the adjacency matrix is true if the coefficient between 2 data points is greater than the threshold
-vector<vector<bool>> create_adjacency_matrix(vector<vector<string>> data, double link_threshold)
+vector<vector<bool>>
+create_adjacency_matrix(vector<vector<string>> data, double link_threshold)
 {
+
     vector<vector<bool>> adjacency_matrix;
     int dataset_length = data.size();
 
@@ -107,111 +103,114 @@ vector<vector<bool>> create_adjacency_matrix(vector<vector<string>> data, double
     return adjacency_matrix;
 }
 
-// void rock::process(const dataset &p_data, rock_data &p_result)
-//     {
-//       create_adjacency_matrix(p_data);
+double calculate_f(double theta)
+{
+    return (1.0 + 2.0 * ((1.0 - theta) / (1.0 + theta)));
+}
 
-//       /* initialize first version of clusters */
-//       for (size_t index = 0; index < p_data.size(); index++)
-//       {
-//         m_clusters.push_back(cluster(1, index));
-//       }
+int calculate_links(vector<vector<bool>> adjacency_matrix, vector<int> A, vector<int> B)
+{
+    int number_links = 0;
 
-//       while ((m_number_clusters < m_clusters.size()) && (merge_cluster()))
-//       {
-//       }
+    for (int i = 0; i < A.size(); i++)
+    {
+        for (int j = 0; j < B.size(); j++)
+        {
+            number_links += adjacency_matrix[A[i]][B[j]];
+        }
+    }
+    return number_links;
+}
 
-//       /* copy results to the output result (it much more optimal to store in list representation for ROCK algorithm) */
-//       p_result.clusters().insert(p_result.clusters().begin(), m_clusters.begin(), m_clusters.end());
+double calculate_goodness(vector<vector<bool>> adjacency_matrix, vector<int> A, vector<int> B, double theta)
+{
+    double num_links = (double)calculate_links(adjacency_matrix, A, B);
+    double norm_degree = calculate_f(theta);
+    double lenA = (double)A.size();
+    double lenB = (double)B.size();
+    double normalize = 1.0 * (pow((lenA + lenB), norm_degree) - pow(lenA, norm_degree) - pow(lenB, norm_degree));
+    return (num_links * 1.0 / normalize) * 1.0;
+}
 
-//       m_clusters.clear();         /* no need it anymore - clear to save memory */
-//       m_adjacency_matrix.clear(); /* no need it anymore - clear to save memory */
-//     }
+pair<int, int> find_pair_clusters(vector<vector<bool>> adjacency_matrix, vector<vector<int>> global_heap, double theta)
+{
+    double maximum_goodness = 0.0;
+    pair<int, int> cluster_indexes(-1, -1);
+    int iters = global_heap.size();
 
-//     bool rock::merge_cluster()
-//     {
-//       auto cluster1 = m_clusters.end();
-//       auto cluster2 = m_clusters.end();
+    for (int i = 0; i < iters; i++)
+    {
+        for (int j = i + 1; j < iters; j++)
+        {
+            double goodness = calculate_goodness(adjacency_matrix, global_heap[i], global_heap[j], theta);
+            if (goodness > maximum_goodness)
+            {
+                maximum_goodness = goodness;
+                cluster_indexes = make_pair(i, j);
+            }
+        }
+    }
+    return cluster_indexes;
+}
 
-//       double maximum_goodness = 0;
+vector<vector<int>> process(vector<vector<string>> data, int k, vector<vector<bool>> adjacency_matrix, double theta)
+{
+    int len = data.size();
+    vector<vector<int>> clusters;
 
-//       for (auto i = m_clusters.begin(); i != m_clusters.end(); ++i)
-//       {
-//         auto next = i;
-//         for (auto j = ++next; j != m_clusters.end(); ++j)
-//         {
-//           double goodness = calculate_goodness(*i, *j);
-//           if (goodness > maximum_goodness)
-//           {
-//             maximum_goodness = goodness;
+    for (int i = 0; i < len; i++)
+    {
+        vector<int> temp;
+        temp.push_back(stoi(data[i][0]));
+        clusters.push_back(temp);
+    }
+    cout << clusters.size() << endl;
+    while (clusters.size() > k)
+    {
+        pair<int, int> clusters_to_pair = find_pair_clusters(adjacency_matrix, clusters, theta);
 
-//             cluster1 = i;
-//             cluster2 = j;
-//           }
-//         }
-//       }
+        if (clusters_to_pair.first != -1 && clusters_to_pair.second != -1)
+        {
+            vector<int> merged_cluster;
 
-//       if (cluster1 == cluster2)
-//       {
-//         return false; /* clusters are totally separated (no links between them), it's impossible to made a desicion which of them should be merged */
-//       }
+            for (int i = 0; i < clusters[clusters_to_pair.first].size(); i++)
+            {
+                cout << clusters[clusters_to_pair.first][i] << " ";
+                merged_cluster.push_back(clusters[clusters_to_pair.first][i]);
+            }
+            cout << endl;
+            for (int i = 0; i < clusters[clusters_to_pair.second].size(); i++)
+            {
+                cout << clusters[clusters_to_pair.second][i] << " ";
+                merged_cluster.push_back(clusters[clusters_to_pair.second][i]);
+            }
+            cout << endl;
 
-//       (*cluster1).insert((*cluster1).end(), (*cluster2).begin(), (*cluster2).end());
-//       m_clusters.erase(cluster2);
+            cout << clusters_to_pair.first << "  " << clusters_to_pair.second << endl;
 
-//       return true;
-//     }
+            for (int i = 0; i < merged_cluster.size(); i++)
+            {
+                cout << merged_cluster[i] << " ";
+            }
+            cout << endl;
 
-//     size_t rock::calculate_links(const cluster &cluster1,
-//                                  const cluster &cluster2) const
-//     {
-//       size_t number_links = 0;
-//       for (auto i : cluster1)
-//       {
-//         for (auto j : cluster2)
-//         {
-//           number_links += (size_t)m_adjacency_matrix.has_connection(i, j);
-//         }
-//       }
+            clusters.push_back(merged_cluster);
+            clusters.erase(clusters.begin() + clusters_to_pair.first);
+            clusters.erase(clusters.begin() + clusters_to_pair.second);
+        }
+        else
+        {
+            break;
+        }
+    }
 
-//       return number_links;
-//     }
-
-//     double rock::calculate_goodness(const cluster &cluster1,
-//                                     const cluster &cluster2) const
-//     {
-//       const double number_links = (double)calculate_links(cluster1, cluster2);
-
-//       const double size_cluster1 = (double)cluster1.size();
-//       const double size_cluster2 = (double)cluster2.size();
-
-//       return number_links / (std::pow(size_cluster1 + size_cluster2, m_degree_normalization) -
-//                              std::pow(size_cluster1, m_degree_normalization) -
-//                              std::pow(size_cluster2, m_degree_normalization));
-//     }
-
-// int calculate_links(cluster cluster1, cluster cluster2){
-//     int number_links
-// }
+    return clusters;
+}
 
 int main()
 {
     vector<vector<string>> data = parse2DCsvFile("sample.data"); // Reading sample data file
-
-    cout << data.size() << endl;
-
-    cout << j_cofficient(data[0], data[1]) << endl; // Printing coefficient of first and second data point
-
-    vector<vector<bool>> adjacency_matrix = create_adjacency_matrix(data, 0.7);
-    vector<cluster> clusters;
-
-    // Printing the adjacency matrix
-    for (auto l : adjacency_matrix)
-    {
-        for (auto x : l)
-            cout << x << " ";
-        cout << endl;
-    }
+    double theta = 0.65;
 
     // Printing the data
     for (auto l : data)
@@ -221,9 +220,32 @@ int main()
         cout << endl;
     }
 
-    // while (true)
-    // {
-    // }
+    cout << data.size() << endl;
+
+    cout << j_cofficient(data[0], data[1]) << endl; // Printing coefficient of first and second data point
+
+    vector<vector<bool>> adjacency_matrix = create_adjacency_matrix(data, theta);
+
+    vector<vector<int>> clusters = process(data, 2, adjacency_matrix, theta);
+
+    // Printing the adjacency matrix
+    for (auto l : adjacency_matrix)
+    {
+        for (auto x : l)
+            cout << x << " ";
+        cout << endl;
+    }
+
+    int cluster_no = 1;
+
+    for (auto l : clusters)
+    {
+        cout << "#" << cluster_no << " ";
+
+        for (auto x : l)
+            cout << x << " ";
+        cluster_no++;
+    }
 
     return 0;
 }
