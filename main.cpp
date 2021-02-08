@@ -111,12 +111,14 @@ double calculate_f(double theta)
 int calculate_links(vector<vector<bool>> adjacency_matrix, vector<int> A, vector<int> B)
 {
     int number_links = 0;
-
+    cout << "The elements in the cluster A of size " << A.size() << " and B of size " << B.size() << " and links between them are" << endl;
     for (int i = 0; i < A.size(); i++)
     {
         for (int j = 0; j < B.size(); j++)
         {
-            number_links += adjacency_matrix[A[i]][B[j]];
+            cout << A[i] << " " << B[j] << " " << adjacency_matrix[A[i]][B[j]] << endl;
+            if (adjacency_matrix[A[i]][B[j]])
+                number_links += 1;
         }
     }
     return number_links;
@@ -161,10 +163,11 @@ vector<vector<int>> process(vector<vector<string>> data, int k, vector<vector<bo
     for (int i = 0; i < len; i++)
     {
         vector<int> temp;
-        temp.push_back(stoi(data[i][0]));
+        cout << "Initial cluster: " << data[i][0] << endl;
+        temp.push_back(stoi(data[i][0]) - 1);
         clusters.push_back(temp);
     }
-    cout << clusters.size() << endl;
+    cout << "Total clusters: " << clusters.size() << " and k = " << k << endl;
     while (clusters.size() > k)
     {
         pair<int, int> clusters_to_pair = find_pair_clusters(adjacency_matrix, clusters, theta);
@@ -173,12 +176,14 @@ vector<vector<int>> process(vector<vector<string>> data, int k, vector<vector<bo
         {
             vector<int> merged_cluster;
 
+            cout << "Elements of first cluster ";
             for (int i = 0; i < clusters[clusters_to_pair.first].size(); i++)
             {
                 cout << clusters[clusters_to_pair.first][i] << " ";
                 merged_cluster.push_back(clusters[clusters_to_pair.first][i]);
             }
             cout << endl;
+            cout << "Elements of second cluster ";
             for (int i = 0; i < clusters[clusters_to_pair.second].size(); i++)
             {
                 cout << clusters[clusters_to_pair.second][i] << " ";
@@ -186,8 +191,10 @@ vector<vector<int>> process(vector<vector<string>> data, int k, vector<vector<bo
             }
             cout << endl;
 
+            cout << "The clusters to be merged are ";
             cout << clusters_to_pair.first << "  " << clusters_to_pair.second << endl;
 
+            cout << "The merged cluster contains ";
             for (int i = 0; i < merged_cluster.size(); i++)
             {
                 cout << merged_cluster[i] << " ";
@@ -196,7 +203,17 @@ vector<vector<int>> process(vector<vector<string>> data, int k, vector<vector<bo
 
             clusters.push_back(merged_cluster);
             clusters.erase(clusters.begin() + clusters_to_pair.first);
-            clusters.erase(clusters.begin() + clusters_to_pair.second);
+            clusters.erase(clusters.begin() + clusters_to_pair.second - 1);
+
+            cout << "The current status of the clusters:" << endl;
+            for (auto x : clusters)
+            {
+                for (auto y : x)
+                {
+                    cout << y << " ";
+                }
+                cout << endl;
+            }
         }
         else
         {
@@ -244,6 +261,8 @@ int main()
 
         for (auto x : l)
             cout << x << " ";
+
+        cout << endl;
         cluster_no++;
     }
 
