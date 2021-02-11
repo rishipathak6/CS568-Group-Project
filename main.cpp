@@ -7,23 +7,25 @@
 
 using namespace std;
 
-class Rock{
-    public:
-        vector<vector<string>> data;
-        vector<vector<bool>> adjacency_matrix;
-        double theta;
+class Rock
+{
+public:
+    vector<vector<string>> data;
+    vector<vector<bool>> adjacency_matrix;
+    double theta;
 
-        Rock(vector<vector<string>> &dataset, double threshold);
-        void create_adjacency_matrix();
-        double j_cofficient(vector<string> &data_point1, vector<string> &data_point2);
-        vector<vector<int>> process(int k);
-        pair<int, int> find_pair_clusters(vector<vector<int>> &global_heap);
-        double calculate_goodness(vector<int> &A, vector<int> &B);
-        int calculate_links(vector<int> &A, vector<int> &B);
-        double calculate_f();
+    Rock(vector<vector<string>> &dataset, double threshold);
+    void create_adjacency_matrix();
+    double j_coefficient(vector<string> &data_point1, vector<string> &data_point2);
+    vector<vector<int>> process(int k);
+    pair<int, int> find_pair_clusters(vector<vector<int>> &global_heap);
+    double calculate_goodness(vector<int> &A, vector<int> &B);
+    int calculate_links(vector<int> &A, vector<int> &B);
+    double calculate_f();
 };
 
-Rock::Rock(vector<vector<string>> &dataset, double threshold){
+Rock::Rock(vector<vector<string>> &dataset, double threshold)
+{
     data = dataset;
     theta = threshold;
     create_adjacency_matrix();
@@ -40,7 +42,7 @@ void Rock::create_adjacency_matrix()
         vector<bool> temp;
         for (int j = 0; j < dataset_length; j++)
         {
-            if (j_cofficient(data[i], data[j]) >= theta)
+            if (j_coefficient(data[i], data[j]) >= theta)
             {
                 temp.push_back(true);
             }
@@ -53,7 +55,7 @@ void Rock::create_adjacency_matrix()
     }
 }
 
-double Rock::j_cofficient(vector<string> &data_point1, vector<string> &data_point2)
+double Rock::j_coefficient(vector<string> &data_point1, vector<string> &data_point2)
 {
     int denominator = data_point1.size();
     int numerator = 0;
@@ -78,18 +80,21 @@ Rock::process(int k)
     for (int i = 0; i < len; i++)
     {
         vector<int> temp;
-        cout << "Initial cluster: " << data[i][0] << endl;
+        // cout << "Initial cluster: " << data[i][0] << endl;
         temp.push_back(stoi(data[i][0]) - 1);
         clusters.push_back(temp);
     }
-    cout << "Total clusters: " << clusters.size() << " and k = " << k << endl;
+    // cout << "Total clusters: " << clusters.size() << " and k = " << k << endl;
     while (clusters.size() > k)
     {
         pair<int, int> clusters_to_pair = find_pair_clusters(clusters);
-
+        cout << "Current number of clusters: " << clusters.size() << endl;
         if (clusters_to_pair.first != -1 && clusters_to_pair.second != -1)
         {
             vector<int> merged_cluster;
+
+            cout << "The clusters to be merged are ";
+            cout << clusters_to_pair.first << "  " << clusters_to_pair.second << endl;
 
             cout << "Elements of first cluster ";
             for (int i = 0; i < clusters[clusters_to_pair.first].size(); i++)
@@ -106,9 +111,6 @@ Rock::process(int k)
             }
             cout << endl;
 
-            cout << "The clusters to be merged are ";
-            cout << clusters_to_pair.first << "  " << clusters_to_pair.second << endl;
-
             cout << "The merged cluster contains ";
             for (int i = 0; i < merged_cluster.size(); i++)
             {
@@ -121,14 +123,18 @@ Rock::process(int k)
             clusters.erase(clusters.begin() + clusters_to_pair.second - 1);
 
             cout << "The current status of the clusters:" << endl;
+            int cluster_no = 1;
             for (auto x : clusters)
             {
+                cout << "#" << cluster_no << " ";
                 for (auto y : x)
                 {
                     cout << y << " ";
                 }
                 cout << endl;
+                cluster_no++;
             }
+            cout << endl;
         }
         else
         {
@@ -138,7 +144,6 @@ Rock::process(int k)
 
     return clusters;
 }
-
 
 pair<int, int> Rock::find_pair_clusters(vector<vector<int>> &global_heap)
 {
@@ -174,12 +179,12 @@ double Rock::calculate_goodness(vector<int> &A, vector<int> &B)
 int Rock::calculate_links(vector<int> &A, vector<int> &B)
 {
     int number_links = 0;
-    cout << "The elements in the cluster A of size " << A.size() << " and B of size " << B.size() << " and links between them are" << endl;
+    // cout << "The elements in the cluster A of size " << A.size() << " and B of size " << B.size() << " and links between them are" << endl;
     for (int i = 0; i < A.size(); i++)
     {
         for (int j = 0; j < B.size(); j++)
         {
-            cout << A[i] << " " << B[j] << " " << adjacency_matrix[A[i]][B[j]] << endl;
+            // cout << A[i] << " " << B[j] << " " << adjacency_matrix[A[i]][B[j]] << endl;
             if (adjacency_matrix[A[i]][B[j]])
                 number_links += 1;
         }
@@ -187,15 +192,10 @@ int Rock::calculate_links(vector<int> &A, vector<int> &B)
     return number_links;
 }
 
-
-
 double Rock::calculate_f()
 {
     return (1.0 + 2.0 * ((1.0 - theta) / (1.0 + theta)));
 }
-
-
-
 
 // Function to parse a CSV file into a 2D string array
 vector<vector<string>> parse2DCsvFile(string inputFileName)
@@ -247,7 +247,6 @@ vector<vector<string>> parse2DCsvFile(string inputFileName)
     return data;
 }
 
-
 int main()
 {
     vector<vector<string>> data = parse2DCsvFile("sample.data"); // Reading sample data file
@@ -255,14 +254,20 @@ int main()
 
     Rock rock(data, theta);
     vector<vector<bool>> adjacency_matrix = rock.adjacency_matrix;
+    cout << "Adjacency Matrix: " << endl;
     for (auto l : adjacency_matrix)
     {
         for (auto x : l)
             cout << x << " ";
         cout << endl;
     }
+    cout << endl;
     vector<vector<int>> clusters = rock.process(2);
     int cluster_no = 1;
+
+    cout << endl;
+    cout << "--------------------------------" << endl;
+    cout << "Final clusters formed are:" << endl;
 
     for (auto l : clusters)
     {
@@ -274,7 +279,6 @@ int main()
         cout << endl;
         cluster_no++;
     }
-
+    cout << "--------------------------------" << endl;
     return 0;
-
 }
