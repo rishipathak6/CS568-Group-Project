@@ -5,3 +5,6 @@ This is a repository for the CS568 Group project of group 9 MinersInPandemic who
 ## Instructions to run the code
 
 `g++ main.cpp`
+`./a.exe > results.txt` in Windows 10
+or
+`./a.out > results.txt` in Linux

@@ -6,13 +6,13 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-
+// Rock Class
 class Rock
 {
 public:
-    vector<vector<string>> data;
-    vector<vector<bool>> adjacency_matrix;
-    double theta;
+    vector<vector<string>> data;           // Stores dataset
+    vector<vector<bool>> adjacency_matrix; // Adjacency Matrix storing links info
+    double theta;                          // Threshold
 
     Rock(vector<vector<string>> &dataset, double threshold);
     void create_adjacency_matrix();
@@ -24,6 +24,7 @@ public:
     double calculate_f();
 };
 
+//Constructor function
 Rock::Rock(vector<vector<string>> &dataset, double threshold)
 {
     data = dataset;
@@ -31,6 +32,7 @@ Rock::Rock(vector<vector<string>> &dataset, double threshold)
     create_adjacency_matrix();
 }
 
+// Initialises the Adjacency Matrix
 void Rock::create_adjacency_matrix()
 {
 
@@ -55,6 +57,7 @@ void Rock::create_adjacency_matrix()
     }
 }
 
+// Calculates Jaccard Coefficient between pair of data points
 double Rock::j_coefficient(vector<string> &data_point1, vector<string> &data_point2)
 {
     int denominator = data_point1.size();
@@ -71,20 +74,20 @@ double Rock::j_coefficient(vector<string> &data_point1, vector<string> &data_poi
     return ((1.0 * numerator) / (denominator - 2));
 }
 
+// Main clustering function
 vector<vector<int>>
 Rock::process(int k)
 {
     int len = data.size();
     vector<vector<int>> clusters;
-
+    // Initially pushes the data points into a matrix
     for (int i = 0; i < len; i++)
     {
         vector<int> temp;
-        // cout << "Initial cluster: " << data[i][0] << endl;
         temp.push_back(stoi(data[i][0]) - 1);
         clusters.push_back(temp);
     }
-    // cout << "Total clusters: " << clusters.size() << " and k = " << k << endl;
+    // Merges clusters till k clusters remain
     while (clusters.size() > k)
     {
         pair<int, int> clusters_to_pair = find_pair_clusters(clusters);
@@ -117,7 +120,7 @@ Rock::process(int k)
                 cout << merged_cluster[i] << " ";
             }
             cout << endl;
-
+            // Add the new merged cluster to matrix and remove the cluster couple from the matrix
             clusters.push_back(merged_cluster);
             clusters.erase(clusters.begin() + clusters_to_pair.first);
             clusters.erase(clusters.begin() + clusters_to_pair.second - 1);
@@ -145,6 +148,7 @@ Rock::process(int k)
     return clusters;
 }
 
+// Find the pair of clusters with maximum goodness measure
 pair<int, int> Rock::find_pair_clusters(vector<vector<int>> &global_heap)
 {
     double maximum_goodness = 0.0;
@@ -166,6 +170,7 @@ pair<int, int> Rock::find_pair_clusters(vector<vector<int>> &global_heap)
     return cluster_indexes;
 }
 
+// Function to calculate goodness between two clusters
 double Rock::calculate_goodness(vector<int> &A, vector<int> &B)
 {
     double num_links = (double)calculate_links(A, B);
@@ -176,6 +181,7 @@ double Rock::calculate_goodness(vector<int> &A, vector<int> &B)
     return (num_links * 1.0 / normalize) * 1.0;
 }
 
+// function to calculate number of links between clusters
 int Rock::calculate_links(vector<int> &A, vector<int> &B)
 {
     int number_links = 0;
@@ -192,6 +198,7 @@ int Rock::calculate_links(vector<int> &A, vector<int> &B)
     return number_links;
 }
 
+// Function to calculate normalization degree
 double Rock::calculate_f()
 {
     return (1.0 + 2.0 * ((1.0 - theta) / (1.0 + theta)));
