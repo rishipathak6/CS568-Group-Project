@@ -1,0 +1,12 @@
+--------------------------------
+Final clusters formed are:
+#1 
+         0 republican
+         2 republican
+
+#2 
+         4 democrat
+         1 democrat
+         3 democrat
+
+--------------------------------
