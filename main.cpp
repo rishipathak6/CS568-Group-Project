@@ -97,7 +97,7 @@ Rock::process(int k)
             vector<int> merged_cluster;
 
             cout << "The clusters to be merged are ";
-            cout << clusters_to_pair.first << "  " << clusters_to_pair.second << endl;
+            cout << clusters_to_pair.first + 1 << "  " << clusters_to_pair.second + 1 << endl;
 
             cout << "Elements of first cluster ";
             for (int i = 0; i < clusters[clusters_to_pair.first].size(); i++)
@@ -151,7 +151,7 @@ Rock::process(int k)
 // Find the pair of clusters with maximum goodness measure
 pair<int, int> Rock::find_pair_clusters(vector<vector<int>> &global_heap)
 {
-    double maximum_goodness = 0.0;
+    double maximum_goodness = 0.8;
     pair<int, int> cluster_indexes(-1, -1);
     int iters = global_heap.size();
 
@@ -254,13 +254,24 @@ vector<vector<string>> parse2DCsvFile(string inputFileName)
     return data;
 }
 
-int main()
+int main(int argc, char **argv)
 {
-    vector<vector<string>> data = parse2DCsvFile("sample.data"); // Reading sample data file
-    double theta = 0.65;
+    string file = argv[1];
+    double theta = stod(argv[2]);
+    int no_clusters = stoi(argv[3]);
+    ofstream Cout("output\\intermidiate.txt");
+    streambuf *coutbuf = cout.rdbuf(); //save old buf
 
+    // optional performance optimizations
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+
+    cout.rdbuf(Cout.rdbuf());
+
+    vector<vector<string>> data = parse2DCsvFile(file); // Reading sample data file
     Rock rock(data, theta);
     vector<vector<bool>> adjacency_matrix = rock.adjacency_matrix;
+
     cout << "Adjacency Matrix: " << endl;
     for (auto l : adjacency_matrix)
     {
@@ -269,23 +280,28 @@ int main()
         cout << endl;
     }
     cout << endl;
-    vector<vector<int>> clusters = rock.process(2);
-    int cluster_no = 1;
 
-    cout << endl;
+    vector<vector<int>> clusters = rock.process(no_clusters);
+    int cluster_no = 1;
+    cout.rdbuf(coutbuf);
+    ofstream out("output\\clusters.txt");
+    cout.rdbuf(out.rdbuf());
+
     cout << "--------------------------------" << endl;
     cout << "Final clusters formed are:" << endl;
-
     for (auto l : clusters)
     {
         cout << "#" << cluster_no << " ";
 
         for (auto x : l)
-            cout << x << " ";
+            cout << endl
+                 << "         " << x << " " << data[x][1];
 
-        cout << endl;
+        cout << endl
+             << endl;
         cluster_no++;
     }
     cout << "--------------------------------" << endl;
+
     return 0;
 }

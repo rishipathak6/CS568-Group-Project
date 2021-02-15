@@ -5,6 +5,11 @@ This is a repository for the CS568 Group project of group 9 MinersInPandemic who
 ## Instructions to run the code
 
 `g++ main.cpp`
-`./a.exe > results.txt` in Windows 10
+`./a.exe data_file theta no_of_clusters` in Windows 10
 or
-`./a.out > results.txt` in Linux
+`./a.out data_file theta no_of_clusters` in Linux
+
+## Output of program
+
+All related output form the program will be printed in intermediate.txt which is loacted in folder named output.
+Final clusters will be printed in clusters.txt which is loacted in folder named output.
