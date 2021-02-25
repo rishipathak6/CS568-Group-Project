@@ -13,11 +13,13 @@ public:
     vector<vector<string>> data;           // Stores dataset
     vector<vector<bool>> adjacency_matrix; // Adjacency Matrix storing links info
     double theta;                          // Threshold
+    vector<vector<int>> clusters;          // Output Clusters
+    int no_clusters;                       // Number of clusters
 
-    Rock(vector<vector<string>> &dataset, double threshold);
+    Rock(vector<vector<string>> &dataset, double threshold, int k);
     void create_adjacency_matrix();
     double j_coefficient(vector<string> &data_point1, vector<string> &data_point2);
-    vector<vector<int>> process(int k);
+    void process(int k, vector<vector<int>> &clusters);
     pair<int, int> find_pair_clusters(vector<vector<int>> &global_heap);
     double calculate_goodness(vector<int> &A, vector<int> &B);
     int calculate_links(vector<int> &A, vector<int> &B);
@@ -25,11 +27,13 @@ public:
 };
 
 //Constructor function
-Rock::Rock(vector<vector<string>> &dataset, double threshold)
+Rock::Rock(vector<vector<string>> &dataset, double threshold, int k)
 {
     data = dataset;
     theta = threshold;
+    no_clusters = k;
     create_adjacency_matrix();
+    process(k, clusters);
 }
 
 // Initialises the Adjacency Matrix
@@ -75,11 +79,10 @@ double Rock::j_coefficient(vector<string> &data_point1, vector<string> &data_poi
 }
 
 // Main clustering function
-vector<vector<int>>
-Rock::process(int k)
+void Rock::process(int k, vector<vector<int>> &clusters)
 {
     int len = data.size();
-    vector<vector<int>> clusters;
+    // vector<vector<int>> clusters;
     // Initially pushes the data points into a matrix
     for (int i = 0; i < len; i++)
     {
@@ -145,7 +148,7 @@ Rock::process(int k)
         }
     }
 
-    return clusters;
+    // return clusters;
 }
 
 // Find the pair of clusters with maximum goodness measure
@@ -254,6 +257,25 @@ vector<vector<string>> parse2DCsvFile(string inputFileName)
     return data;
 }
 
+// class Incremental
+// {
+// private:
+//     /* data */
+//     vector<vector<int>> initial_clusters;
+//     vector<vector<string>> new_data;
+//     int batch_size;
+
+// public:
+//     Incremental(vector<vector<int>> &initial_clusters, vector<vector<string>> &new_data, int batch_size);
+// };
+
+// Incremental::Incremental(vector<vector<int>> &initial_clusters, vector<vector<string>> &new_data, int batch_size)
+// {
+//     this->initial_clusters = initial_clusters;
+//     this->new_data = new_data;
+//     this->batch_size = batch_size;
+// }
+
 int main(int argc, char **argv)
 {
     string file = argv[1];
@@ -269,7 +291,7 @@ int main(int argc, char **argv)
     cout.rdbuf(Cout.rdbuf());
 
     vector<vector<string>> data = parse2DCsvFile(file); // Reading sample data file
-    Rock rock(data, theta);
+    Rock rock(data, theta, no_clusters);
     vector<vector<bool>> adjacency_matrix = rock.adjacency_matrix;
 
     cout << "Adjacency Matrix: " << endl;
@@ -281,7 +303,7 @@ int main(int argc, char **argv)
     }
     cout << endl;
 
-    vector<vector<int>> clusters = rock.process(no_clusters);
+    vector<vector<int>> clusters = rock.clusters;
     int cluster_no = 1;
     cout.rdbuf(coutbuf);
     ofstream out("output\\clusters.txt");
@@ -302,6 +324,6 @@ int main(int argc, char **argv)
         cluster_no++;
     }
     cout << "--------------------------------" << endl;
-
+    cout.rdbuf(coutbuf);
     return 0;
 }
