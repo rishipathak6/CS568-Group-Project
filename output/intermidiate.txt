@@ -1,10 +1,3 @@
-Adjacency Matrix: 
-1 0 1 0 0 
-0 1 0 1 1 
-1 0 1 0 0 
-0 1 0 1 1 
-0 1 0 1 1 
-
 Current number of clusters: 5
 The clusters to be merged are 1  3
 Elements of first cluster 0 
@@ -34,4 +27,11 @@ The merged cluster contains 4 1 3
 The current status of the clusters:
 #1 0 2 
 #2 4 1 3 
+
+Adjacency Matrix: 
+1 0 1 0 0 
+0 1 0 1 1 
+1 0 1 0 0 
+0 1 0 1 1 
+0 1 0 1 1 
 
