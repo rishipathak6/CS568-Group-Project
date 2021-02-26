@@ -257,30 +257,184 @@ vector<vector<string>> parse2DCsvFile(string inputFileName)
     return data;
 }
 
-// class Incremental
-// {
-// private:
-//     /* data */
-//     vector<vector<int>> initial_clusters;
-//     vector<vector<string>> new_data;
-//     int batch_size;
+class Incremental
+{
+    // private:
 
-// public:
-//     Incremental(vector<vector<int>> &initial_clusters, vector<vector<string>> &new_data, int batch_size);
-// };
+public:
+    /* data */
+    Rock initial_clustering;
+    vector<vector<string>> new_data;
+    // int batch_size;
 
-// Incremental::Incremental(vector<vector<int>> &initial_clusters, vector<vector<string>> &new_data, int batch_size)
-// {
-//     this->initial_clusters = initial_clusters;
-//     this->new_data = new_data;
-//     this->batch_size = batch_size;
-// }
+    /* functions */
+    Incremental(Rock &initial_clustering, vector<vector<string>> &new_data, int batch_size);
+    void update_adjacency_matrix();
+    void incremental_process();
+};
+
+Incremental::Incremental(Rock &initial_clustering, vector<vector<string>> &new_data, int batch_size) : initial_clustering(initial_clustering)
+{
+    this->initial_clustering = initial_clustering;
+    this->new_data = new_data;
+    // this->batch_size = batch_size;
+    update_adjacency_matrix();
+    incremental_process();
+}
+
+void Incremental::update_adjacency_matrix()
+{
+    for (int i = 0; i < initial_clustering.data.size(); i++)
+    {
+        for (int j = 0; j < new_data.size(); j++)
+        {
+            if (initial_clustering.j_coefficient(initial_clustering.data[i], new_data[j]) >= initial_clustering.theta)
+            {
+                initial_clustering.adjacency_matrix[i].push_back(true);
+            }
+            else
+            {
+                initial_clustering.adjacency_matrix[i].push_back(false);
+            }
+        }
+    }
+
+    for (int i = 0; i < new_data.size(); i++)
+    {
+        vector<bool> temp;
+        for (int j = 0; j < initial_clustering.data.size(); j++)
+        {
+            if (initial_clustering.j_coefficient(new_data[i], initial_clustering.data[j]) >= initial_clustering.theta)
+            {
+                temp.push_back(true);
+            }
+            else
+            {
+                temp.push_back(false);
+            }
+        }
+        initial_clustering.adjacency_matrix.push_back(temp);
+    }
+    for (int i = 0; i < new_data.size(); i++)
+    {
+        for (int j = 0; j < new_data.size(); j++)
+        {
+            if (initial_clustering.j_coefficient(new_data[i], new_data[j]) >= initial_clustering.theta)
+            {
+                initial_clustering.adjacency_matrix[initial_clustering.data.size() + i].push_back(true);
+            }
+            else
+            {
+                initial_clustering.adjacency_matrix[initial_clustering.data.size() + i].push_back(false);
+            }
+        }
+    }
+}
+
+void Incremental::incremental_process()
+{
+    int len = initial_clustering.clusters.size();
+    for (int i = 0; i < new_data.size(); i++)
+    {
+        vector<int> temp;
+        temp.push_back(stoi(new_data[i][0]) + initial_clustering.data.size() - 1);
+        initial_clustering.clusters.push_back(temp);
+    }
+
+    while (initial_clustering.clusters.size() > initial_clustering.no_clusters)
+    {
+        int maximum_goodness = 0.0;
+        int u = -1, v = -1;
+        cout << "len = " << len << endl;
+        for (int i = max(len, 0); i < initial_clustering.clusters.size(); i++)
+        {
+            for (int k = 0; k < initial_clustering.clusters[i].size(); k++)
+            {
+                cout << initial_clustering.clusters[i][k] << " ";
+            }
+            cout << endl;
+            for (int j = 0; j < initial_clustering.clusters.size(); j++)
+            {
+                double goodness = initial_clustering.calculate_goodness(initial_clustering.clusters[i], initial_clustering.clusters[j]);
+                if (goodness > maximum_goodness && i != j)
+                {
+                    maximum_goodness = goodness;
+                    u = i;
+                    v = j;
+                }
+            }
+        }
+
+        cout << "Current number of clusters: " << initial_clustering.clusters.size() << endl;
+        if (u != -1 && v != -1)
+        {
+            vector<int> merged_cluster;
+
+            cout << "The clusters to be merged are ";
+            cout << u + 1 << "  " << v + 1 << endl;
+
+            cout << "Elements of first cluster ";
+            for (int i = 0; i < initial_clustering.clusters[u].size(); i++)
+            {
+                cout << initial_clustering.clusters[u][i] << " ";
+                merged_cluster.push_back(initial_clustering.clusters[u][i]);
+            }
+            cout << endl;
+            cout << "Elements of second cluster ";
+            for (int i = 0; i < initial_clustering.clusters[v].size(); i++)
+            {
+                cout << initial_clustering.clusters[v][i] << " ";
+                merged_cluster.push_back(initial_clustering.clusters[v][i]);
+            }
+            cout << endl;
+
+            cout << "The merged cluster contains ";
+            for (int i = 0; i < merged_cluster.size(); i++)
+            {
+                cout << merged_cluster[i] << " ";
+            }
+            cout << endl;
+
+            // Add the new merged cluster to matrix and remove the cluster couple from the matrix
+            initial_clustering.clusters.push_back(merged_cluster);
+            if (u < v)
+            {
+                initial_clustering.clusters.erase(initial_clustering.clusters.begin() + u);
+                initial_clustering.clusters.erase(initial_clustering.clusters.begin() + v - 1);
+            }
+            else
+            {
+                initial_clustering.clusters.erase(initial_clustering.clusters.begin() + v);
+                initial_clustering.clusters.erase(initial_clustering.clusters.begin() + u - 1);
+            }
+            len--;
+            cout << "The current status of the clusters:" << endl;
+            int cluster_no = 1;
+            for (auto x : initial_clustering.clusters)
+            {
+                cout << "#" << cluster_no << " | ";
+                for (auto y : x)
+                {
+                    cout << y << " ";
+                }
+                cout << endl;
+                cluster_no++;
+            }
+            cout << endl;
+        }
+        else
+        {
+            break;
+        }
+    }
+}
 
 int main(int argc, char **argv)
 {
     string file = argv[1];
     double theta = stod(argv[2]);
     int no_clusters = stoi(argv[3]);
+    string inc_file = argv[4];
     ofstream Cout("output\\intermidiate.txt");
     streambuf *coutbuf = cout.rdbuf(); //save old buf
 
@@ -318,6 +472,43 @@ int main(int argc, char **argv)
         for (auto x : l)
             cout << endl
                  << "         " << x << " " << data[x][1];
+
+        cout << endl
+             << endl;
+        cluster_no++;
+    }
+    cout << "--------------------------------" << endl;
+    cout.rdbuf(coutbuf);
+    ofstream nout("output\\new_clusters.txt");
+    cout.rdbuf(nout.rdbuf());
+
+    vector<vector<string>> new_data = parse2DCsvFile(inc_file);
+    Incremental inc(rock, new_data, 2);
+    vector<vector<bool>> new_adjacency_matrix = inc.initial_clustering.adjacency_matrix;
+
+    cout << "Adjacency Matrix: " << endl;
+    for (auto l : new_adjacency_matrix)
+    {
+        for (auto x : l)
+            cout << x << " ";
+        cout << endl;
+    }
+    cout << endl;
+
+    vector<vector<int>> new_clusters = inc.initial_clustering.clusters;
+    cluster_no = 1;
+
+    cout << "--------------------------------" << endl;
+    cout << "New clusters formed are:" << endl;
+    for (auto l : new_clusters)
+    {
+        cout << "#" << cluster_no << " ";
+
+        for (auto x : l)
+            x < data.size() ? cout << endl
+                                   << "         " << x << " " << data[x][1]
+                            : cout << endl
+                                   << "         " << x << " " << new_data[x - data.size()][1];
 
         cout << endl
              << endl;
