@@ -281,8 +281,12 @@ Incremental::Incremental(Rock &initial_clustering, vector<vector<string>> &new_d
     this->no_batches = new_data.size() / batch_size;
     for (int i = 0; i <= no_batches; i++)
     {
+        cout << "--------------------------------" << endl;
+        cout << "Batch number: " << i + 1 << endl;
         update_adjacency_matrix(i);
         incremental_process(i);
+        cout << "--------------------------------" << endl
+             << endl;
     }
 }
 
@@ -386,7 +390,7 @@ void Incremental::incremental_process(int curr_batch)
 
     while (initial_clustering.clusters.size() > initial_clustering.no_clusters)
     {
-        int maximum_goodness = 0.0;
+        int maximum_goodness = 0.8;
         int u = -1, v = -1;
         cout << "len = " << len << endl;
         for (int i = max(len, 0); i < initial_clustering.clusters.size(); i++)
