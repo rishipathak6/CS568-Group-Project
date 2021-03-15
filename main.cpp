@@ -265,79 +265,122 @@ public:
     /* data */
     Rock initial_clustering;
     vector<vector<string>> new_data;
-    // int batch_size;
-
+    int batch_size;
+    int no_batches;
     /* functions */
     Incremental(Rock &initial_clustering, vector<vector<string>> &new_data, int batch_size);
-    void update_adjacency_matrix();
-    void incremental_process();
+    void update_adjacency_matrix(int curr_batch);
+    void incremental_process(int curr_batch);
 };
 
 Incremental::Incremental(Rock &initial_clustering, vector<vector<string>> &new_data, int batch_size) : initial_clustering(initial_clustering)
 {
     this->initial_clustering = initial_clustering;
     this->new_data = new_data;
-    // this->batch_size = batch_size;
-    update_adjacency_matrix();
-    incremental_process();
+    this->batch_size = batch_size;
+    this->no_batches = new_data.size() / batch_size;
+    for (int i = 0; i <= no_batches; i++)
+    {
+        update_adjacency_matrix(i);
+        incremental_process(i);
+    }
 }
 
-void Incremental::update_adjacency_matrix()
+void Incremental::update_adjacency_matrix(int curr_batch)
 {
-    for (int i = 0; i < initial_clustering.data.size(); i++)
+    int new_data_size = new_data.size();
+    for (int i = 0; i < initial_clustering.adjacency_matrix.size(); i++)
     {
-        for (int j = 0; j < new_data.size(); j++)
+        for (int j = 0; j < min(batch_size, new_data_size - curr_batch * batch_size); j++)
         {
-            if (initial_clustering.j_coefficient(initial_clustering.data[i], new_data[j]) >= initial_clustering.theta)
+            if (i < initial_clustering.data.size())
             {
-                initial_clustering.adjacency_matrix[i].push_back(true);
+                if (initial_clustering.j_coefficient(initial_clustering.data[i], new_data[curr_batch * batch_size + j]) >= initial_clustering.theta)
+                {
+                    initial_clustering.adjacency_matrix[i].push_back(true);
+                }
+                else
+                {
+                    initial_clustering.adjacency_matrix[i].push_back(false);
+                }
             }
             else
             {
-                initial_clustering.adjacency_matrix[i].push_back(false);
+                if (initial_clustering.j_coefficient(new_data[i - initial_clustering.data.size()], new_data[curr_batch * batch_size + j]) >= initial_clustering.theta)
+                {
+                    initial_clustering.adjacency_matrix[i].push_back(true);
+                }
+                else
+                {
+                    initial_clustering.adjacency_matrix[i].push_back(false);
+                }
             }
         }
     }
 
-    for (int i = 0; i < new_data.size(); i++)
+    for (int i = 0; i < min(batch_size, new_data_size - curr_batch * batch_size); i++)
     {
         vector<bool> temp;
-        for (int j = 0; j < initial_clustering.data.size(); j++)
+        for (int j = 0; j < initial_clustering.adjacency_matrix.size(); j++)
         {
-            if (initial_clustering.j_coefficient(new_data[i], initial_clustering.data[j]) >= initial_clustering.theta)
+            if (j < initial_clustering.data.size())
             {
-                temp.push_back(true);
+                if (initial_clustering.j_coefficient(new_data[curr_batch * batch_size + i], initial_clustering.data[j]) >= initial_clustering.theta)
+                {
+                    temp.push_back(true);
+                }
+                else
+                {
+                    temp.push_back(false);
+                }
             }
             else
             {
-                temp.push_back(false);
+                if (initial_clustering.j_coefficient(new_data[curr_batch * batch_size + i], new_data[j - initial_clustering.data.size()]) >= initial_clustering.theta)
+                {
+                    temp.push_back(true);
+                }
+                else
+                {
+                    temp.push_back(false);
+                }
             }
         }
         initial_clustering.adjacency_matrix.push_back(temp);
     }
-    for (int i = 0; i < new_data.size(); i++)
+    for (int i = 0; i < min(batch_size, new_data_size - curr_batch * batch_size); i++)
     {
-        for (int j = 0; j < new_data.size(); j++)
+        for (int j = 0; j < min(batch_size, new_data_size - curr_batch * batch_size); j++)
         {
-            if (initial_clustering.j_coefficient(new_data[i], new_data[j]) >= initial_clustering.theta)
+            if (initial_clustering.j_coefficient(new_data[curr_batch * batch_size + i], new_data[curr_batch * batch_size + j]) >= initial_clustering.theta)
             {
-                initial_clustering.adjacency_matrix[initial_clustering.data.size() + i].push_back(true);
+                initial_clustering.adjacency_matrix[initial_clustering.data.size() + curr_batch * batch_size + i].push_back(true);
             }
             else
             {
-                initial_clustering.adjacency_matrix[initial_clustering.data.size() + i].push_back(false);
+                initial_clustering.adjacency_matrix[initial_clustering.data.size() + curr_batch * batch_size + i].push_back(false);
             }
         }
     }
+
+    // cout << "Current Adjacency Matrix: " << endl;
+    // for (auto l : initial_clustering.adjacency_matrix)
+    // {
+    //     for (auto x : l)
+    //         cout << x << " ";
+    //     cout << endl;
+    // }
+    // cout << endl;
 }
 
-void Incremental::incremental_process()
+void Incremental::incremental_process(int curr_batch)
 {
     int len = initial_clustering.clusters.size();
-    for (int i = 0; i < new_data.size(); i++)
+    int new_data_size = new_data.size();
+    for (int i = 0; i < min(batch_size, new_data_size - curr_batch * batch_size); i++)
     {
         vector<int> temp;
-        temp.push_back(stoi(new_data[i][0]) + initial_clustering.data.size() - 1);
+        temp.push_back(stoi(new_data[curr_batch * batch_size + i][0]) + initial_clustering.data.size() - 1);
         initial_clustering.clusters.push_back(temp);
     }
 
@@ -435,6 +478,7 @@ int main(int argc, char **argv)
     double theta = stod(argv[2]);
     int no_clusters = stoi(argv[3]);
     string inc_file = argv[4];
+    int batch_size = stoi(argv[5]);
     ofstream Cout("output\\intermidiate.txt");
     streambuf *coutbuf = cout.rdbuf(); //save old buf
 
@@ -483,7 +527,7 @@ int main(int argc, char **argv)
     cout.rdbuf(nout.rdbuf());
 
     vector<vector<string>> new_data = parse2DCsvFile(inc_file);
-    Incremental inc(rock, new_data, 2);
+    Incremental inc(rock, new_data, batch_size);
     vector<vector<bool>> new_adjacency_matrix = inc.initial_clustering.adjacency_matrix;
 
     cout << "Adjacency Matrix: " << endl;
