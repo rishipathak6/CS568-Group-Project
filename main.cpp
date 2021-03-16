@@ -390,48 +390,111 @@ void Incremental::incremental_process(int curr_batch)
 
     while (initial_clustering.clusters.size() > initial_clustering.no_clusters)
     {
-        int maximum_goodness = 0.8;
-        int u = -1, v = -1;
-        cout << "len = " << len << endl;
-        for (int i = max(len, 0); i < initial_clustering.clusters.size(); i++)
-        {
-            for (int k = 0; k < initial_clustering.clusters[i].size(); k++)
-            {
-                cout << initial_clustering.clusters[i][k] << " ";
-            }
-            cout << endl;
-            for (int j = 0; j < initial_clustering.clusters.size(); j++)
-            {
-                double goodness = initial_clustering.calculate_goodness(initial_clustering.clusters[i], initial_clustering.clusters[j]);
-                if (goodness > maximum_goodness && i != j)
-                {
-                    maximum_goodness = goodness;
-                    u = i;
-                    v = j;
-                }
-            }
-        }
+        // int maximum_goodness = 0.8;
+        // int u = -1, v = -1;
+        // cout << "len = " << len << endl;
+        // for (int i = max(len, 0); i < initial_clustering.clusters.size(); i++)
+        // {
+        //     for (int k = 0; k < initial_clustering.clusters[i].size(); k++)
+        //     {
+        //         cout << initial_clustering.clusters[i][k] << " ";
+        //     }
+        //     cout << endl;
+        //     for (int j = 0; j < initial_clustering.clusters.size(); j++)
+        //     {
+        //         double goodness = initial_clustering.calculate_goodness(initial_clustering.clusters[i], initial_clustering.clusters[j]);
+        //         if (goodness > maximum_goodness && i != j)
+        //         {
+        //             maximum_goodness = goodness;
+        //             u = i;
+        //             v = j;
+        //         }
+        //     }
+        // }
 
+        // cout << "Current number of clusters: " << initial_clustering.clusters.size() << endl;
+        // if (u != -1 && v != -1)
+        // {
+        //     vector<int> merged_cluster;
+
+        //     cout << "The clusters to be merged are ";
+        //     cout << u + 1 << "  " << v + 1 << endl;
+
+        //     cout << "Elements of first cluster ";
+        //     for (int i = 0; i < initial_clustering.clusters[u].size(); i++)
+        //     {
+        //         cout << initial_clustering.clusters[u][i] << " ";
+        //         merged_cluster.push_back(initial_clustering.clusters[u][i]);
+        //     }
+        //     cout << endl;
+        //     cout << "Elements of second cluster ";
+        //     for (int i = 0; i < initial_clustering.clusters[v].size(); i++)
+        //     {
+        //         cout << initial_clustering.clusters[v][i] << " ";
+        //         merged_cluster.push_back(initial_clustering.clusters[v][i]);
+        //     }
+        //     cout << endl;
+
+        //     cout << "The merged cluster contains ";
+        //     for (int i = 0; i < merged_cluster.size(); i++)
+        //     {
+        //         cout << merged_cluster[i] << " ";
+        //     }
+        //     cout << endl;
+
+        //     // Add the new merged cluster to matrix and remove the cluster couple from the matrix
+        //     initial_clustering.clusters.push_back(merged_cluster);
+        //     if (u < v)
+        //     {
+        //         initial_clustering.clusters.erase(initial_clustering.clusters.begin() + u);
+        //         initial_clustering.clusters.erase(initial_clustering.clusters.begin() + v - 1);
+        //     }
+        //     else
+        //     {
+        //         initial_clustering.clusters.erase(initial_clustering.clusters.begin() + v);
+        //         initial_clustering.clusters.erase(initial_clustering.clusters.begin() + u - 1);
+        //     }
+        //     len--;
+        //     cout << "The current status of the clusters:" << endl;
+        //     int cluster_no = 1;
+        //     for (auto x : initial_clustering.clusters)
+        //     {
+        //         cout << "#" << cluster_no << " | ";
+        //         for (auto y : x)
+        //         {
+        //             cout << y << " ";
+        //         }
+        //         cout << endl;
+        //         cluster_no++;
+        //     }
+        //     cout << endl;
+        // }
+        // else
+        // {
+        //     break;
+        // }
+
+        pair<int, int> clusters_to_pair = initial_clustering.find_pair_clusters(initial_clustering.clusters);
         cout << "Current number of clusters: " << initial_clustering.clusters.size() << endl;
-        if (u != -1 && v != -1)
+        if (clusters_to_pair.first != -1 && clusters_to_pair.second != -1)
         {
             vector<int> merged_cluster;
 
             cout << "The clusters to be merged are ";
-            cout << u + 1 << "  " << v + 1 << endl;
+            cout << clusters_to_pair.first + 1 << "  " << clusters_to_pair.second + 1 << endl;
 
             cout << "Elements of first cluster ";
-            for (int i = 0; i < initial_clustering.clusters[u].size(); i++)
+            for (int i = 0; i < initial_clustering.clusters[clusters_to_pair.first].size(); i++)
             {
-                cout << initial_clustering.clusters[u][i] << " ";
-                merged_cluster.push_back(initial_clustering.clusters[u][i]);
+                cout << initial_clustering.clusters[clusters_to_pair.first][i] << " ";
+                merged_cluster.push_back(initial_clustering.clusters[clusters_to_pair.first][i]);
             }
             cout << endl;
             cout << "Elements of second cluster ";
-            for (int i = 0; i < initial_clustering.clusters[v].size(); i++)
+            for (int i = 0; i < initial_clustering.clusters[clusters_to_pair.second].size(); i++)
             {
-                cout << initial_clustering.clusters[v][i] << " ";
-                merged_cluster.push_back(initial_clustering.clusters[v][i]);
+                cout << initial_clustering.clusters[clusters_to_pair.second][i] << " ";
+                merged_cluster.push_back(initial_clustering.clusters[clusters_to_pair.second][i]);
             }
             cout << endl;
 
@@ -441,25 +504,16 @@ void Incremental::incremental_process(int curr_batch)
                 cout << merged_cluster[i] << " ";
             }
             cout << endl;
-
             // Add the new merged cluster to matrix and remove the cluster couple from the matrix
             initial_clustering.clusters.push_back(merged_cluster);
-            if (u < v)
-            {
-                initial_clustering.clusters.erase(initial_clustering.clusters.begin() + u);
-                initial_clustering.clusters.erase(initial_clustering.clusters.begin() + v - 1);
-            }
-            else
-            {
-                initial_clustering.clusters.erase(initial_clustering.clusters.begin() + v);
-                initial_clustering.clusters.erase(initial_clustering.clusters.begin() + u - 1);
-            }
-            len--;
+            initial_clustering.clusters.erase(initial_clustering.clusters.begin() + clusters_to_pair.first);
+            initial_clustering.clusters.erase(initial_clustering.clusters.begin() + clusters_to_pair.second - 1);
+
             cout << "The current status of the clusters:" << endl;
             int cluster_no = 1;
             for (auto x : initial_clustering.clusters)
             {
-                cout << "#" << cluster_no << " | ";
+                cout << "#" << cluster_no << " ";
                 for (auto y : x)
                 {
                     cout << y << " ";
@@ -527,8 +581,8 @@ int main(int argc, char **argv)
     }
     cout << "--------------------------------" << endl;
     cout.rdbuf(coutbuf);
-    ofstream nout("output\\new_clusters.txt");
-    cout.rdbuf(nout.rdbuf());
+    ofstream niout("output\\new_intermidiate.txt");
+    cout.rdbuf(niout.rdbuf());
 
     vector<vector<string>> new_data = parse2DCsvFile(inc_file);
     Incremental inc(rock, new_data, batch_size);
@@ -545,6 +599,9 @@ int main(int argc, char **argv)
 
     vector<vector<int>> new_clusters = inc.initial_clustering.clusters;
     cluster_no = 1;
+    cout.rdbuf(coutbuf);
+    ofstream nout("output\\new_clusters.txt");
+    cout.rdbuf(nout.rdbuf());
 
     cout << "--------------------------------" << endl;
     cout << "New clusters formed are:" << endl;
