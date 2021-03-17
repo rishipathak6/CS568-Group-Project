@@ -1,42 +1,6 @@
 --------------------------------
 Final clusters formed are:
 #1 
-         16 democrat
-
-#2 
-         95 democrat
-
-#3 
-         103 democrat
-
-#4 
-         157 democrat
-
-#5 
-         316 democrat
-
-#6 
-         413 republican
-
-#7 
-         361 democrat
-         102 democrat
-         216 democrat
-
-#8 
-         104 democrat
-         393 republican
-
-#9 
-         248 republican
-         107 republican
-         183 democrat
-
-#10 
-         129 democrat
-         261 democrat
-
-#11 
          342 democrat
          115 democrat
          370 democrat
@@ -256,22 +220,7 @@ Final clusters formed are:
          3 democrat
          94 democrat
 
-#12 
-         188 republican
-         167 republican
-         281 republican
-
-#13 
-         377 republican
-         295 republican
-         315 republican
-
-#14 
-         390 democrat
-         54 democrat
-         286 democrat
-
-#15 
+#2 
          373 democrat
          166 republican
          101 democrat
