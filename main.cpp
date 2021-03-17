@@ -271,6 +271,7 @@ public:
     Incremental(Rock &initial_clustering, vector<vector<string>> &new_data, int batch_size);
     void update_adjacency_matrix(int curr_batch);
     void incremental_process(int curr_batch);
+    void remove_outliers();
 };
 
 Incremental::Incremental(Rock &initial_clustering, vector<vector<string>> &new_data, int batch_size) : initial_clustering(initial_clustering)
@@ -288,6 +289,7 @@ Incremental::Incremental(Rock &initial_clustering, vector<vector<string>> &new_d
         cout << "--------------------------------" << endl
              << endl;
     }
+    remove_outliers();
 }
 
 void Incremental::update_adjacency_matrix(int curr_batch)
@@ -527,6 +529,53 @@ void Incremental::incremental_process(int curr_batch)
         {
             break;
         }
+    }
+}
+
+void Incremental::remove_outliers()
+{
+    int max_cluster_size = 0;
+    for (int i = 0; i < initial_clustering.clusters.size(); i++)
+    {
+        if (max_cluster_size < initial_clustering.clusters[i].size())
+        {
+            max_cluster_size = initial_clustering.clusters[i].size();
+        }
+    }
+    int bad_cluster_threshold = 0.05 * max_cluster_size;
+    vector<int> bad_cluster_index;
+    for (int i = 0; i < initial_clustering.clusters.size(); i++)
+    {
+        if (initial_clustering.clusters[i].size() <= bad_cluster_threshold)
+        {
+            bad_cluster_index.push_back(i);
+        }
+    }
+
+    if (bad_cluster_index.size() > 0.3 * initial_clustering.clusters.size())
+    {
+        cout << "The number of bad clusters is greater than 30\% of total clusters" << endl;
+    }
+    else
+    {
+        for (int i = 0; i < bad_cluster_index.size(); i++)
+        {
+            initial_clustering.clusters.erase(initial_clustering.clusters.begin() + bad_cluster_index[i] - i);
+        }
+
+        cout << "The final clusters after removing outliers are:" << endl;
+        int cluster_no = 1;
+        for (auto x : initial_clustering.clusters)
+        {
+            cout << "#" << cluster_no << " ";
+            for (auto y : x)
+            {
+                cout << y << " ";
+            }
+            cout << endl;
+            cluster_no++;
+        }
+        cout << endl;
     }
 }
 

@@ -1,92 +1,253 @@
 --------------------------------
 New clusters formed are:
 #1 
-         16 democrat
-
-#2 
-         54 democrat
-
-#3 
-         95 democrat
-
-#4 
-         104 democrat
-
-#5 
-         107 republican
-
-#6 
-         129 democrat
-
-#7 
-         94 democrat
-         101 democrat
-         102 democrat
          103 democrat
 
+#2 
+         157 democrat
+
+#3 
+         316 democrat
+
+#4 
+         413 republican
+
+#5 
+         361 democrat
+         102 democrat
+         216 democrat
+
+#6 
+         104 democrat
+         393 republican
+
+#7 
+         248 republican
+         107 republican
+         183 democrat
+
 #8 
-         188 republican
+         129 democrat
+         261 democrat
 
 #9 
+         188 republican
+         167 republican
+         281 republican
+
+#10 
+         377 republican
+         295 republican
+         315 republican
+
+#11 
+         16 democrat
+         451 democrat
+
+#12 
+         532 democrat
+         531 democrat
+         523 democrat
+         520 democrat
+         524 republican
+         519 republican
+         522 republican
+         521 republican
+         518 republican
+         508 republican
+         513 democrat
+         512 democrat
+         511 democrat
+         510 democrat
+         500 republican
+         501 republican
+         502 republican
+         488 republican
+         490 republican
+         486 republican
+         494 republican
+         491 republican
+         493 republican
+         471 republican
+         472 republican
+         473 republican
+         470 republican
+         465 republican
+         446 republican
+         445 republican
+         449 republican
+         450 republican
+         438 democrat
+         439 democrat
+         437 democrat
+         440 democrat
+         441 democrat
+         442 republican
+         436 republican
+         435 republican
+         373 democrat
+         166 republican
+         101 democrat
+         288 democrat
+         289 democrat
+         4 democrat
+         88 democrat
+         242 republican
+         97 democrat
+         406 democrat
+         28 republican
+         343 republican
+         351 republican
+         277 republican
+         420 republican
          168 democrat
          151 democrat
-         162 democrat
-         197 republican
-         155 republican
-         164 democrat
-         156 republican
-         161 democrat
-         160 democrat
-         173 democrat
-         191 republican
-         190 republican
-         195 republican
-         171 republican
-         158 republican
-         163 republican
-         150 republican
-         141 republican
-         117 republican
-         100 democrat
-         142 republican
-         123 republican
-         120 republican
-         119 republican
-         132 republican
-         122 republican
-         121 republican
-         134 republican
-         113 republican
-         135 republican
-         133 republican
-         126 republican
-         111 republican
-         136 republican
-         125 republican
-         146 republican
-         106 republican
-         88 democrat
-         97 democrat
          2 democrat
+         400 republican
+         397 democrat
          78 democrat
-         77 democrat
+         240 republican
+         300 republican
+         273 republican
+         239 republican
+         141 republican
+         349 republican
+         275 democrat
+         117 republican
          5 democrat
-         96 democrat
-         85 democrat
+         433 republican
+         363 republican
+         314 republican
+         77 democrat
+         162 democrat
+         100 democrat
+         385 democrat
+         197 republican
+         257 republican
+         142 republican
          76 democrat
-         79 republican
-         99 republican
+         215 democrat
+         345 republican
+         229 republican
+         382 democrat
          10 republican
+         164 democrat
+         372 democrat
+         96 democrat
+         353 republican
+         85 democrat
+         155 republican
+         365 democrat
          75 democrat
+         384 democrat
+         364 republican
+         256 republican
+         123 republican
+         161 democrat
+         204 republican
+         120 republican
+         430 republican
+         427 republican
+         282 republican
+         296 republican
+         207 republican
+         340 republican
          36 republican
+         156 republican
+         79 republican
+         339 republican
+         173 democrat
+         99 republican
+         347 republican
+         335 republican
+         310 republican
          89 republican
+         416 republican
+         359 republican
+         302 republican
+         136 republican
+         399 republican
+         308 republican
+         305 republican
+         279 republican
+         266 republican
+         235 republican
+         206 republican
+         135 republican
+         122 republican
+         113 republican
          86 republican
          84 republican
          53 republican
+         412 republican
+         407 democrat
+         404 republican
+         403 republican
+         401 republican
+         346 republican
+         325 democrat
+         313 republican
+         231 republican
+         223 republican
+         214 republican
+         191 republican
+         171 republican
+         150 republican
+         133 republican
+         132 republican
+         125 republican
+         121 republican
+         111 republican
          82 republican
          65 republican
          55 republican
          15 republican
+         434 republican
+         432 republican
+         410 republican
+         409 republican
+         405 republican
+         392 republican
+         388 democrat
+         379 republican
+         378 republican
+         375 democrat
+         374 republican
+         369 republican
+         357 republican
+         356 republican
+         330 republican
+         327 republican
+         324 republican
+         306 republican
+         304 republican
+         303 republican
+         283 republican
+         278 republican
+         276 republican
+         253 republican
+         251 republican
+         250 republican
+         247 republican
+         233 republican
+         230 republican
+         228 republican
+         225 republican
+         224 republican
+         217 republican
+         211 republican
+         195 republican
+         190 republican
+         163 republican
+         160 democrat
+         158 republican
+         154 republican
+         148 republican
+         146 republican
+         134 republican
+         126 republican
+         119 republican
+         106 republican
          87 republican
          83 republican
          67 republican
@@ -111,111 +272,295 @@ New clusters formed are:
          6 democrat
          0 republican
          1 republican
-         3 democrat
-         4 democrat
-         148 republican
-         147 democrat
-         28 republican
          73 republican
-         140 republican
-         154 republican
-         167 republican
-         166 republican
-         183 democrat
+         274 republican
+         394 democrat
+         322 democrat
+         323 democrat
+         443 republican
+         453 republican
+         463 republican
+         468 republican
+         484 republican
+         492 republican
+         496 republican
+         514 republican
+         517 republican
+         534 republican
+
+#13 
+         95 democrat
+         530 democrat
+
+#14 
+         529 democrat
+         527 democrat
+         528 democrat
+         533 democrat
+         525 democrat
+         516 democrat
+         506 republican
+         505 democrat
+         509 democrat
+         499 democrat
+         497 democrat
+         503 democrat
+         495 democrat
+         498 democrat
+         487 democrat
+         483 democrat
+         475 democrat
+         482 democrat
+         480 democrat
+         479 democrat
+         476 democrat
+         477 democrat
+         481 democrat
+         474 democrat
+         467 democrat
+         466 democrat
+         456 democrat
+         455 democrat
+         457 democrat
+         459 democrat
+         458 democrat
+         464 democrat
+         462 democrat
+         460 democrat
+         448 democrat
+         447 democrat
+         452 democrat
+         342 democrat
          115 democrat
+         370 democrat
+         352 democrat
+         387 democrat
+         159 democrat
+         341 democrat
+         381 democrat
+         294 democrat
+         144 democrat
+         358 democrat
+         290 democrat
+         395 democrat
+         140 republican
+         402 republican
          180 democrat
-         153 democrat
-         152 democrat
+         320 democrat
+         237 democrat
+         326 democrat
+         147 democrat
+         336 democrat
+         13 democrat
+         287 democrat
+         362 democrat
+         81 democrat
+         80 democrat
          196 democrat
+         292 democrat
+         153 democrat
+         424 democrat
+         428 democrat
+         408 democrat
+         234 democrat
+         131 democrat
+         391 democrat
          192 democrat
-         165 democrat
+         143 democrat
+         291 democrat
+         429 democrat
+         355 republican
+         380 democrat
+         246 democrat
+         112 democrat
+         71 republican
+         199 democrat
+         299 democrat
+         415 democrat
+         145 democrat
+         130 democrat
+         205 democrat
+         293 democrat
+         138 democrat
+         267 republican
+         309 democrat
+         12 democrat
+         311 democrat
+         307 democrat
          176 republican
          194 democrat
-         178 democrat
-         199 democrat
-         177 democrat
-         170 democrat
-         198 democrat
-         169 democrat
-         172 democrat
-         174 democrat
-         185 democrat
-         181 democrat
-         187 democrat
-         184 democrat
-         182 democrat
-         189 democrat
-         193 democrat
-         175 democrat
-         179 democrat
-         144 democrat
-         131 democrat
-         128 democrat
-         112 democrat
-         145 democrat
-         138 democrat
          137 democrat
-         143 democrat
-         127 democrat
-         118 democrat
-         149 democrat
-         130 democrat
-         110 democrat
-         105 democrat
+         243 democrat
+         92 democrat
+         48 democrat
+         360 democrat
+         354 democrat
+         284 democrat
+         178 democrat
+         297 democrat
+         280 democrat
+         198 democrat
+         366 democrat
+         425 democrat
+         169 democrat
+         40 democrat
+         417 democrat
+         301 democrat
+         47 democrat
+         170 democrat
+         45 democrat
+         64 democrat
+         21 democrat
+         52 democrat
+         9 democrat
+         321 democrat
+         62 democrat
+         418 democrat
+         371 democrat
+         70 democrat
+         44 democrat
+         348 democrat
+         329 democrat
+         218 democrat
+         238 democrat
+         331 democrat
+         174 democrat
          114 democrat
          109 democrat
          108 democrat
-         124 democrat
-         139 democrat
-         80 democrat
-         81 democrat
-         13 democrat
-         74 democrat
-         71 republican
-         92 democrat
-         93 democrat
-         39 democrat
-         48 democrat
-         98 democrat
-         64 democrat
-         47 democrat
-         20 democrat
-         91 democrat
-         90 democrat
-         26 democrat
-         25 democrat
-         22 democrat
-         72 democrat
-         70 democrat
-         69 democrat
          68 democrat
-         63 democrat
-         62 democrat
+         22 democrat
+         17 democrat
+         98 democrat
          60 democrat
-         52 democrat
-         50 democrat
-         46 democrat
-         45 democrat
-         44 democrat
-         43 democrat
+         431 democrat
+         319 democrat
+         268 democrat
+         264 democrat
+         263 democrat
+         227 democrat
+         187 democrat
+         149 democrat
+         24 democrat
+         317 democrat
+         269 democrat
+         262 democrat
+         259 democrat
+         185 democrat
          42 democrat
+         172 democrat
+         426 democrat
+         265 democrat
+         260 democrat
+         254 democrat
+         203 democrat
+         179 democrat
+         93 democrat
+         90 democrat
          41 democrat
-         40 democrat
-         34 democrat
+         25 democrat
+         419 democrat
+         414 democrat
+         338 democrat
+         318 democrat
+         272 democrat
+         255 democrat
+         241 democrat
+         220 democrat
+         208 democrat
+         200 democrat
+         46 democrat
          32 democrat
+         389 democrat
+         244 democrat
+         39 democrat
+         249 democrat
+         139 democrat
+         337 democrat
+         332 democrat
+         222 democrat
+         189 democrat
+         182 democrat
+         127 democrat
+         43 democrat
+         177 democrat
+         411 democrat
+         209 democrat
+         116 democrat
+         110 democrat
+         74 democrat
+         26 democrat
+         376 democrat
+         333 democrat
+         328 democrat
+         312 democrat
+         270 democrat
+         236 democrat
+         219 democrat
+         201 democrat
+         193 democrat
+         69 democrat
+         63 democrat
+         34 democrat
+         23 democrat
+         245 democrat
+         124 democrat
+         91 democrat
+         72 democrat
          31 democrat
+         344 democrat
+         298 democrat
+         184 democrat
+         181 democrat
+         175 democrat
+         165 democrat
+         423 democrat
+         422 democrat
+         350 democrat
+         334 democrat
+         258 democrat
+         226 democrat
+         212 democrat
+         202 democrat
+         118 democrat
+         105 democrat
+         271 democrat
+         210 democrat
+         20 democrat
+         368 democrat
+         285 democrat
+         232 democrat
+         186 democrat
+         50 democrat
          29 democrat
          27 democrat
-         24 democrat
-         23 democrat
-         21 democrat
          19 democrat
-         17 democrat
-         9 democrat
-         12 democrat
-         116 democrat
-         186 democrat
-         157 democrat
-         159 democrat
+         367 democrat
+         252 democrat
+         152 democrat
+         383 democrat
+         213 democrat
+         128 democrat
+         421 democrat
+         398 democrat
+         396 democrat
+         386 democrat
+         221 democrat
+         3 democrat
+         94 democrat
+         444 democrat
+         454 democrat
+         461 democrat
+         469 democrat
+         478 democrat
+         485 democrat
+         390 democrat
+         54 democrat
+         286 democrat
+         489 democrat
+         504 democrat
+         507 democrat
+         515 democrat
+         526 democrat
 
 --------------------------------
