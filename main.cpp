@@ -24,6 +24,8 @@ public:
     double calculate_goodness(vector<int> &A, vector<int> &B);
     int calculate_links(vector<int> &A, vector<int> &B);
     double calculate_f();
+    void calculate_accuracy(vector<vector<int>> &clusters);
+    void remove_outliers(vector<vector<int>> &clusters);
 };
 
 //Constructor function
@@ -34,6 +36,8 @@ Rock::Rock(vector<vector<string>> &dataset, double threshold, int k)
     no_clusters = k;
     create_adjacency_matrix();
     process(k, clusters);
+    remove_outliers(clusters);
+    calculate_accuracy(clusters);
 }
 
 // Initialises the Adjacency Matrix
@@ -207,6 +211,96 @@ double Rock::calculate_f()
     return (1.0 + 2.0 * ((1.0 - theta) / (1.0 + theta)));
 }
 
+void Rock::calculate_accuracy(vector<vector<int>> &clusters)
+{
+    int total_points = 0;
+    int FP = 0;
+    
+    for (auto cluster : clusters)
+    {
+        total_points += cluster.size();
+        map <string, int> freq_dist;
+        for (auto point : cluster)
+        {
+            freq_dist[data[point][1]]++;           
+        }
+
+        int max_frequent = 0;
+        for(auto it = freq_dist.begin(); it != freq_dist.end(); ++it ){ 
+            if (it ->second > max_frequent) {
+                max_frequent = it->second;
+            }
+        }
+
+        FP += cluster.size() - max_frequent;
+
+    }
+
+    double FP_ratio = (double)FP/(double)total_points;
+    int outliers = data.size() - total_points;
+    
+    ofstream file;
+    file.open ("output/accuracy.txt");
+    file << "FP ratio is: ";
+    file << FP_ratio;
+    file << "\nNumber of outliers are: ";
+    file << outliers;
+    file.close();
+}
+
+
+void Rock::remove_outliers(vector<vector<int>> &clusters)
+{
+    int max_cluster_size = 0;
+    for (int i = 0; i < clusters.size(); i++)
+    {
+        if (max_cluster_size < clusters[i].size())
+        {
+            max_cluster_size = clusters[i].size();
+        }
+    }
+    int bad_cluster_threshold = 0.05 * max_cluster_size;
+    vector<int> bad_cluster_index;
+    int bad_cluster_total_points = 0;
+    for (int i = 0; i < clusters.size(); i++)
+    {
+        if (clusters[i].size() <= bad_cluster_threshold)
+        {
+            bad_cluster_index.push_back(i);
+            bad_cluster_total_points += clusters[i].size();
+        }
+    }
+
+    if (bad_cluster_total_points > 0.3 * data.size())
+    {
+        cout << "The number of bad clusters is greater than 30\% of total clusters" << endl;
+    }
+    else
+    {
+        for (int i = 0; i < bad_cluster_index.size(); i++)
+        {
+            clusters.erase(clusters.begin() + bad_cluster_index[i] - i);
+        }
+
+        // cout << "The final clusters after removing outliers are:" << endl;
+        // int cluster_no = 1;
+        // for (auto x : clusters)
+        // {
+        //     cout << "#" << cluster_no << " ";
+        //     for (auto y : x)
+        //     {
+        //         cout << y << " ";
+        //     }
+        //     cout << endl;
+        //     cluster_no++;
+        // }
+        // cout << endl;
+    }
+}
+
+
+
+
 // Function to parse a CSV file into a 2D string array
 vector<vector<string>> parse2DCsvFile(string inputFileName)
 {
@@ -257,6 +351,8 @@ vector<vector<string>> parse2DCsvFile(string inputFileName)
     return data;
 }
 
+
+
 class Incremental
 {
     // private:
@@ -271,6 +367,7 @@ public:
     Incremental(Rock &initial_clustering, vector<vector<string>> &new_data, int batch_size);
     void update_adjacency_matrix(int curr_batch);
     void incremental_process(int curr_batch);
+    void calculate_accuracy();
     void remove_outliers();
 };
 
@@ -290,6 +387,7 @@ Incremental::Incremental(Rock &initial_clustering, vector<vector<string>> &new_d
              << endl;
     }
     remove_outliers();
+    calculate_accuracy();
 }
 
 void Incremental::update_adjacency_matrix(int curr_batch)
@@ -531,6 +629,52 @@ void Incremental::incremental_process(int curr_batch)
         }
     }
 }
+
+
+void Incremental::calculate_accuracy()
+{
+    int total_points = 0;
+    int FP = 0;
+    
+    for (auto cluster : initial_clustering.clusters)
+    {
+        total_points += cluster.size();
+        map <string, int> freq_dist;
+        for (auto point : cluster)
+        {
+            if(point < initial_clustering.data.size()){
+                freq_dist[initial_clustering.data[point][1]]++;
+            }
+            else{
+                freq_dist[new_data[point - initial_clustering.data.size()][1]];
+            }          
+        }
+        int max_frequent = 0;
+        for(auto it = freq_dist.begin(); it != freq_dist.end(); ++it ){ 
+            if (it ->second > max_frequent) {
+                max_frequent = it->second;
+            }
+        }
+
+        FP += cluster.size() - max_frequent;
+
+    }
+
+ 
+    double FP_ratio = (double)FP/(double)total_points;
+    int outliers = initial_clustering.data.size() + new_data.size() - total_points;
+    
+    ofstream file;
+    file.open ("output/new_accuracy.txt");
+    file << "FP ratio is: ";
+    file << FP_ratio;
+    file << "\nNumber of outliers are: ";
+    file << outliers;
+    file.close();
+}
+
+
+
 
 void Incremental::remove_outliers()
 {

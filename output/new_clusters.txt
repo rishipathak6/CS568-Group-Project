@@ -506,10 +506,6 @@ New clusters formed are:
          469 democrat
          478 democrat
          485 democrat
-         390 democrat
-         54 democrat
-         286 democrat
-         489 democrat
          504 democrat
          507 democrat
          515 democrat
