@@ -544,15 +544,17 @@ void Incremental::remove_outliers()
     }
     int bad_cluster_threshold = 0.05 * max_cluster_size;
     vector<int> bad_cluster_index;
+    int bad_cluster_total_points = 0;
     for (int i = 0; i < initial_clustering.clusters.size(); i++)
     {
         if (initial_clustering.clusters[i].size() <= bad_cluster_threshold)
         {
             bad_cluster_index.push_back(i);
+            bad_cluster_total_points += initial_clustering.clusters[i].size();
         }
     }
 
-    if (bad_cluster_index.size() > 0.3 * initial_clustering.clusters.size())
+    if (bad_cluster_total_points > 0.3 * (initial_clustering.data.size() + new_data.size()))
     {
         cout << "The number of bad clusters is greater than 30\% of total clusters" << endl;
     }

@@ -1,50 +1,6 @@
 --------------------------------
 New clusters formed are:
 #1 
-         103 democrat
-
-#2 
-         157 democrat
-
-#3 
-         316 democrat
-
-#4 
-         413 republican
-
-#5 
-         361 democrat
-         102 democrat
-         216 democrat
-
-#6 
-         104 democrat
-         393 republican
-
-#7 
-         248 republican
-         107 republican
-         183 democrat
-
-#8 
-         129 democrat
-         261 democrat
-
-#9 
-         188 republican
-         167 republican
-         281 republican
-
-#10 
-         377 republican
-         295 republican
-         315 republican
-
-#11 
-         16 democrat
-         451 democrat
-
-#12 
          532 democrat
          531 democrat
          523 democrat
@@ -288,11 +244,7 @@ New clusters formed are:
          517 republican
          534 republican
 
-#13 
-         95 democrat
-         530 democrat
-
-#14 
+#2 
          529 democrat
          527 democrat
          528 democrat
