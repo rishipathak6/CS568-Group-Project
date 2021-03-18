@@ -1,2 +1,2 @@
-FP ratio is: 0.383908
+FP ratio is: 0
 Number of outliers are: 0
