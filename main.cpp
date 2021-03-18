@@ -36,7 +36,7 @@ Rock::Rock(vector<vector<string>> &dataset, double threshold, int k)
     no_clusters = k;
     create_adjacency_matrix();
     process(k, clusters);
-    remove_outliers(clusters);
+    //remove_outliers(clusters);
     calculate_accuracy(clusters);
 }
 
@@ -158,7 +158,7 @@ void Rock::process(int k, vector<vector<int>> &clusters)
 // Find the pair of clusters with maximum goodness measure
 pair<int, int> Rock::find_pair_clusters(vector<vector<int>> &global_heap)
 {
-    double maximum_goodness = 0.8;
+    double maximum_goodness = 0.0;
     pair<int, int> cluster_indexes(-1, -1);
     int iters = global_heap.size();
 
@@ -167,6 +167,7 @@ pair<int, int> Rock::find_pair_clusters(vector<vector<int>> &global_heap)
         for (int j = i + 1; j < iters; j++)
         {
             double goodness = calculate_goodness(global_heap[i], global_heap[j]);
+            // cout<<goodness<<endl;
             if (goodness > maximum_goodness)
             {
                 maximum_goodness = goodness;
@@ -248,7 +249,6 @@ void Rock::calculate_accuracy(vector<vector<int>> &clusters)
     file.close();
 }
 
-
 void Rock::remove_outliers(vector<vector<int>> &clusters)
 {
     int max_cluster_size = 0;
@@ -281,25 +281,8 @@ void Rock::remove_outliers(vector<vector<int>> &clusters)
         {
             clusters.erase(clusters.begin() + bad_cluster_index[i] - i);
         }
-
-        // cout << "The final clusters after removing outliers are:" << endl;
-        // int cluster_no = 1;
-        // for (auto x : clusters)
-        // {
-        //     cout << "#" << cluster_no << " ";
-        //     for (auto y : x)
-        //     {
-        //         cout << y << " ";
-        //     }
-        //     cout << endl;
-        //     cluster_no++;
-        // }
-        // cout << endl;
     }
 }
-
-
-
 
 // Function to parse a CSV file into a 2D string array
 vector<vector<string>> parse2DCsvFile(string inputFileName)
@@ -351,8 +334,6 @@ vector<vector<string>> parse2DCsvFile(string inputFileName)
     return data;
 }
 
-
-
 class Incremental
 {
     // private:
@@ -386,7 +367,7 @@ Incremental::Incremental(Rock &initial_clustering, vector<vector<string>> &new_d
         cout << "--------------------------------" << endl
              << endl;
     }
-    remove_outliers();
+    //remove_outliers();
     calculate_accuracy();
 }
 
@@ -490,90 +471,6 @@ void Incremental::incremental_process(int curr_batch)
 
     while (initial_clustering.clusters.size() > initial_clustering.no_clusters)
     {
-        // int maximum_goodness = 0.8;
-        // int u = -1, v = -1;
-        // cout << "len = " << len << endl;
-        // for (int i = max(len, 0); i < initial_clustering.clusters.size(); i++)
-        // {
-        //     for (int k = 0; k < initial_clustering.clusters[i].size(); k++)
-        //     {
-        //         cout << initial_clustering.clusters[i][k] << " ";
-        //     }
-        //     cout << endl;
-        //     for (int j = 0; j < initial_clustering.clusters.size(); j++)
-        //     {
-        //         double goodness = initial_clustering.calculate_goodness(initial_clustering.clusters[i], initial_clustering.clusters[j]);
-        //         if (goodness > maximum_goodness && i != j)
-        //         {
-        //             maximum_goodness = goodness;
-        //             u = i;
-        //             v = j;
-        //         }
-        //     }
-        // }
-
-        // cout << "Current number of clusters: " << initial_clustering.clusters.size() << endl;
-        // if (u != -1 && v != -1)
-        // {
-        //     vector<int> merged_cluster;
-
-        //     cout << "The clusters to be merged are ";
-        //     cout << u + 1 << "  " << v + 1 << endl;
-
-        //     cout << "Elements of first cluster ";
-        //     for (int i = 0; i < initial_clustering.clusters[u].size(); i++)
-        //     {
-        //         cout << initial_clustering.clusters[u][i] << " ";
-        //         merged_cluster.push_back(initial_clustering.clusters[u][i]);
-        //     }
-        //     cout << endl;
-        //     cout << "Elements of second cluster ";
-        //     for (int i = 0; i < initial_clustering.clusters[v].size(); i++)
-        //     {
-        //         cout << initial_clustering.clusters[v][i] << " ";
-        //         merged_cluster.push_back(initial_clustering.clusters[v][i]);
-        //     }
-        //     cout << endl;
-
-        //     cout << "The merged cluster contains ";
-        //     for (int i = 0; i < merged_cluster.size(); i++)
-        //     {
-        //         cout << merged_cluster[i] << " ";
-        //     }
-        //     cout << endl;
-
-        //     // Add the new merged cluster to matrix and remove the cluster couple from the matrix
-        //     initial_clustering.clusters.push_back(merged_cluster);
-        //     if (u < v)
-        //     {
-        //         initial_clustering.clusters.erase(initial_clustering.clusters.begin() + u);
-        //         initial_clustering.clusters.erase(initial_clustering.clusters.begin() + v - 1);
-        //     }
-        //     else
-        //     {
-        //         initial_clustering.clusters.erase(initial_clustering.clusters.begin() + v);
-        //         initial_clustering.clusters.erase(initial_clustering.clusters.begin() + u - 1);
-        //     }
-        //     len--;
-        //     cout << "The current status of the clusters:" << endl;
-        //     int cluster_no = 1;
-        //     for (auto x : initial_clustering.clusters)
-        //     {
-        //         cout << "#" << cluster_no << " | ";
-        //         for (auto y : x)
-        //         {
-        //             cout << y << " ";
-        //         }
-        //         cout << endl;
-        //         cluster_no++;
-        //     }
-        //     cout << endl;
-        // }
-        // else
-        // {
-        //     break;
-        // }
-
         pair<int, int> clusters_to_pair = initial_clustering.find_pair_clusters(initial_clustering.clusters);
         cout << "Current number of clusters: " << initial_clustering.clusters.size() << endl;
         if (clusters_to_pair.first != -1 && clusters_to_pair.second != -1)
@@ -630,7 +527,6 @@ void Incremental::incremental_process(int curr_batch)
     }
 }
 
-
 void Incremental::calculate_accuracy()
 {
     int total_points = 0;
@@ -646,18 +542,18 @@ void Incremental::calculate_accuracy()
                 freq_dist[initial_clustering.data[point][1]]++;
             }
             else{
-                freq_dist[new_data[point - initial_clustering.data.size()][1]];
+                freq_dist[new_data[point - initial_clustering.data.size()][1]]++;
             }          
         }
+        
         int max_frequent = 0;
-        for(auto it = freq_dist.begin(); it != freq_dist.end(); ++it ){ 
+        for(auto it = freq_dist.begin(); it != freq_dist.end(); ++it ){
             if (it ->second > max_frequent) {
                 max_frequent = it->second;
             }
         }
 
         FP += cluster.size() - max_frequent;
-
     }
 
  
@@ -672,9 +568,6 @@ void Incremental::calculate_accuracy()
     file << outliers;
     file.close();
 }
-
-
-
 
 void Incremental::remove_outliers()
 {

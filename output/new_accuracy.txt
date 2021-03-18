@@ -1,2 +1,2 @@
-FP ratio is: 0.282051
-Number of outliers are: 28
+FP ratio is: 0.383908
+Number of outliers are: 0
