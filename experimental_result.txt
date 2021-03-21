@@ -1,0 +1,72 @@
+Total points: 1050
+Tot_N: 550725
+Tot_P: 184137
+FP is: 2589
+TN is: 373565
+FN is: 177160
+TP is: 181548
+rand_i is: 0.755398
+Precision is: 0.98594
+recall is: 0.506116
+f1 measure is: 0.668876
+
+Total points: 1100
+Tot_N: 604450
+Tot_P: 192587
+FP is: 8851
+TN is: 350567
+FN is: 253883
+TP is: 183736
+rand_i is: 0.670362
+Precision is: 0.954042
+recall is: 0.419854
+f1 measure is: 0.583098
+
+Total points: 1150
+Tot_N: 660675
+Tot_P: 206037
+FP is: 18679
+TN is: 330921
+FN is: 329754
+TP is: 187358
+rand_i is: 0.597983
+Precision is: 0.909342
+recall is: 0.362316
+f1 measure is: 0.518173
+
+Total points: 1200
+Tot_N: 719400
+Tot_P: 224069
+FP is: 31786
+TN is: 257038
+FN is: 462362
+TP is: 192283
+rand_i is: 0.476244
+Precision is: 0.858142
+recall is: 0.293721
+f1 measure is: 0.437646
+
+Total points: 1250
+Tot_N: 780625
+Tot_P: 247419
+FP is: 47731
+TN is: 225823
+FN is: 554802
+TP is: 199688
+rand_i is: 0.413903
+Precision is: 0.807084
+recall is: 0.264666
+f1 measure is: 0.398615
+
+Total points: 1300
+Tot_N: 844350
+Tot_P: 275769
+FP is: 68264
+TN is: 199864
+FN is: 644486
+TP is: 207505
+rand_i is: 0.363684
+Precision is: 0.752459
+recall is: 0.243553
+f1 measure is: 0.367995
+
