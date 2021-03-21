@@ -226,8 +226,6 @@ void Rock::calculate_accuracy(vector<vector<int>> &clusters)
     int FN = 0;
     int Tot_N = 0;
     unordered_map<string, int> till_last_cluster;
-    ofstream file;
-    file.open("output/accuracy.txt");
 
     unordered_map<string, int>::iterator itr;
     for (itr = cl_count.begin(); itr != cl_count.end(); itr++)
@@ -255,7 +253,6 @@ void Rock::calculate_accuracy(vector<vector<int>> &clusters)
             }
 
             FN += (cl_count[itr1->first] - till_last_cluster[itr1->first]) * cur_cluster[itr1->first];
-            file << "FN is: " << FN << endl;
         }
     }
 
@@ -268,6 +265,8 @@ void Rock::calculate_accuracy(vector<vector<int>> &clusters)
     double f1_measure = (2 * precision * recall) / (precision + recall);
     int outliers = data.size() - total_points;
 
+    ofstream file;
+    file.open("output/accuracy.txt");
     file << "Total points: " << total_points << endl;
     file << "Tot_N: " << Tot_N << endl;
     file << "Tot_P: " << Tot_P << endl;
@@ -641,51 +640,9 @@ void Incremental::calculate_accuracy()
     file << "Precision is: " << precision << endl;
     file << "recall is: " << recall << endl;
     file << "f1 measure is: " << f1_measure << endl;
-    // file << "\nNumber of outliers are: ";
-    // file << outliers;
+    file << "\nNumber of outliers are: ";
+    file << outliers;
     file.close();
-
-    // int total_points = 0;
-    // int FP = 0;
-
-    // for (auto cluster : initial_clustering.clusters)
-    // {
-    //     total_points += cluster.size();
-    //     map<string, int> freq_dist;
-    //     for (auto point : cluster)
-    //     {
-    //         if (point < initial_clustering.data.size())
-    //         {
-    //             freq_dist[initial_clustering.data[point][1]]++;
-    //         }
-    //         else
-    //         {
-    //             freq_dist[new_data[point - initial_clustering.data.size()][1]]++;
-    //         }
-    //     }
-
-    //     int max_frequent = 0;
-    //     for (auto it = freq_dist.begin(); it != freq_dist.end(); ++it)
-    //     {
-    //         if (it->second > max_frequent)
-    //         {
-    //             max_frequent = it->second;
-    //         }
-    //     }
-
-    //     FP += cluster.size() - max_frequent;
-    // }
-
-    // double FP_ratio = (double)FP / (double)total_points;
-    // int outliers = initial_clustering.data.size() + new_data.size() - total_points;
-
-    // ofstream file;
-    // file.open("output/new_accuracy.txt");
-    // file << "FP ratio is: ";
-    // file << FP_ratio;
-    // file << "\nNumber of outliers are: ";
-    // file << outliers;
-    // file.close();
 }
 
 void Incremental::remove_outliers()
@@ -830,14 +787,5 @@ int main(int argc, char **argv)
 
     cout << "--------------------------------" << endl;
     cout.rdbuf(coutbuf);
-    unordered_map<string, int>::iterator itr;
-    for (itr = cl_count.begin(); itr != cl_count.end(); itr++)
-    {
-        // itr works as a pointer to pair<string, double>
-        // type itr->first stores the key part  and
-        // itr->second stroes the value part
-        cout << itr->first << "  " << itr->second << endl;
-    }
-
     return 0;
 }
