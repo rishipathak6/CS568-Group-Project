@@ -1,2 +1,13 @@
-FP ratio is: 0
+Total points: 350
+Tot_N: 61075
+Tot_P: 49381
+FP is: 28018
+TN is: 50446
+FN is: 10629
+TP is: 21363
+rand_i is: 0.650114
+Precision is: 0.432616
+recall is: 0.667761
+f1 measure is: 0.525064
+
 Number of outliers are: 0

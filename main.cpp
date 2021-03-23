@@ -3,6 +3,7 @@
 #include <sstream>  //istringstream
 #include <iostream> // cout
 #include <fstream>  // ifstream
+#include <map>      //map
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -89,6 +90,7 @@ double Rock::j_coefficient(vector<string> &data_point1, vector<string> &data_poi
 void Rock::process(int k, vector<vector<int>> &clusters)
 {
     int len = data.size();
+    bool flag = true;
     // vector<vector<int>> clusters;
     // Initially pushes the data points into a matrix
     for (int i = 0; i < len; i++)
@@ -148,10 +150,15 @@ void Rock::process(int k, vector<vector<int>> &clusters)
                 cluster_no++;
             }
             cout << endl;
-        }
+                }
         else
         {
             break;
+        }
+        if (flag && clusters.size() < 0.1 * data.size())
+        {
+            flag = false;
+            remove_outliers(clusters);
         }
     }
 
@@ -294,27 +301,51 @@ void Rock::remove_outliers(vector<vector<int>> &clusters)
         }
     }
     int bad_cluster_threshold = 0.05 * max_cluster_size;
-    vector<int> bad_cluster_index;
+    map<int, int> bad_cluster;
     int bad_cluster_total_points = 0;
     for (int i = 0; i < clusters.size(); i++)
     {
         if (clusters[i].size() <= bad_cluster_threshold)
         {
-            bad_cluster_index.push_back(i);
+            bad_cluster[i] = clusters[i].size();
             bad_cluster_total_points += clusters[i].size();
         }
     }
 
     if (bad_cluster_total_points > 0.3 * data.size())
     {
-        cout << "The number of bad clusters is greater than 30\% of total clusters" << endl;
+        cout << "The number of points in bad clusters is greater than 30\% of total points" << endl;
     }
     else
     {
-        for (int i = 0; i < bad_cluster_index.size(); i++)
+        int i = 0;
+        cout << "total clusters " << clusters.size() << endl;
+        cout << "total bad clusters are " << bad_cluster.size() << endl;
+
+        cout << "The bad clusters are: " << endl;
+        for (auto itr = bad_cluster.begin(); itr != bad_cluster.end(); ++itr)
         {
-            clusters.erase(clusters.begin() + bad_cluster_index[i] - i);
+            cout << itr->first << " " << itr->second << endl;
+            if (clusters.size() > no_clusters)
+            {
+                cout << clusters[itr->first - i].size() << endl;
+                clusters.erase(clusters.begin() + itr->first - i);
+                i++;
+            }
         }
+        cout << "The clusters after removing outliers are:" << endl;
+        int cluster_no = 1;
+        for (auto x : clusters)
+        {
+            cout << "#" << cluster_no << " ";
+            for (auto y : x)
+            {
+                cout << y << " ";
+            }
+            cout << endl;
+            cluster_no++;
+        }
+        cout << endl;
     }
 }
 
@@ -401,16 +432,17 @@ Incremental::Incremental(Rock &initial_clustering, vector<vector<string>> &new_d
     this->new_data = new_data;
     this->batch_size = batch_size;
     this->no_batches = new_data.size() / batch_size;
+    bool flag = true;
     for (int i = 0; i <= no_batches; i++)
     {
         cout << "--------------------------------" << endl;
         cout << "Batch number: " << i + 1 << endl;
         update_adjacency_matrix(i);
         incremental_process(i);
+        remove_outliers();
         cout << "--------------------------------" << endl
              << endl;
     }
-    //remove_outliers();
     calculate_accuracy();
 }
 
@@ -656,26 +688,37 @@ void Incremental::remove_outliers()
         }
     }
     int bad_cluster_threshold = 0.05 * max_cluster_size;
-    vector<int> bad_cluster_index;
+    map<int, int> bad_cluster;
     int bad_cluster_total_points = 0;
     for (int i = 0; i < initial_clustering.clusters.size(); i++)
     {
         if (initial_clustering.clusters[i].size() <= bad_cluster_threshold)
         {
-            bad_cluster_index.push_back(i);
+            bad_cluster[i] = initial_clustering.clusters[i].size();
             bad_cluster_total_points += initial_clustering.clusters[i].size();
         }
     }
 
     if (bad_cluster_total_points > 0.3 * (initial_clustering.data.size() + new_data.size()))
     {
-        cout << "The number of bad clusters is greater than 30\% of total clusters" << endl;
+        cout << "The number of points in bad clusters is greater than 30\% of total points" << endl;
     }
     else
     {
-        for (int i = 0; i < bad_cluster_index.size(); i++)
+        int i = 0;
+        cout << "total clusters " << initial_clustering.clusters.size() << endl;
+        cout << "total bad clusters are " << bad_cluster.size() << endl;
+
+        cout << "The bad clusters are: " << endl;
+        for (auto itr = bad_cluster.begin(); itr != bad_cluster.end(); ++itr)
         {
-            initial_clustering.clusters.erase(initial_clustering.clusters.begin() + bad_cluster_index[i] - i);
+            cout << itr->first << " " << itr->second << endl;
+
+            if (initial_clustering.clusters.size() > initial_clustering.no_clusters)
+            {
+                initial_clustering.clusters.erase(initial_clustering.clusters.begin() + itr->first - i);
+                i++;
+            }
         }
 
         cout << "The final clusters after removing outliers are:" << endl;
