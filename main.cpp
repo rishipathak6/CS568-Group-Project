@@ -260,7 +260,7 @@ void Rock::calculate_accuracy(vector<vector<int>> &clusters)
     Tot_N = (total_points * (total_points - 1)) / 2;
     TN = Tot_N - FN;
     double precision = (double)TP / ((double)TP + (double)FP);
-    double rand_i = ((double)TP + (double)TN) / ((double)TP + (double)FP + (double)TN + (double)FN);
+    double rand_index = ((double)TP + (double)TN) / ((double)TP + (double)FP + (double)TN + (double)FN);
     double recall = (double)TP / ((double)TP + (double)FN);
     double f1_measure = (2 * precision * recall) / (precision + recall);
     int outliers = data.size() - total_points;
@@ -274,8 +274,8 @@ void Rock::calculate_accuracy(vector<vector<int>> &clusters)
     file << "TN is: " << TN << endl;
     file << "FN is: " << FN << endl;
     file << "TP is: " << TP << endl;
-    file << "rand_i is: " << rand_i << endl;
-    file << "Precision is: " << precision << endl;
+    file << "rand index is: " << rand_index << endl;
+    file << "precision is: " << precision << endl;
     file << "recall is: " << recall << endl;
     file << "f1 measure is: " << f1_measure << endl;
     file << "\nNumber of outliers are: ";
@@ -622,7 +622,7 @@ void Incremental::calculate_accuracy()
     Tot_N = (total_points * (total_points - 1)) / 2;
     TN = Tot_N - FN;
     double precision = (double)TP / ((double)TP + (double)FP);
-    double rand_i = ((double)TP + (double)TN) / ((double)TP + (double)FP + (double)TN + (double)FN);
+    double rand_index = ((double)TP + (double)TN) / ((double)TP + (double)FP + (double)TN + (double)FN);
     double recall = (double)TP / ((double)TP + (double)FN);
     double f1_measure = (2 * precision * recall) / (precision + recall);
     int outliers = initial_clustering.data.size() + new_data.size() - total_points;
@@ -636,7 +636,7 @@ void Incremental::calculate_accuracy()
     file << "TN is: " << TN << endl;
     file << "FN is: " << FN << endl;
     file << "TP is: " << TP << endl;
-    file << "rand_i is: " << rand_i << endl;
+    file << "rand index is: " << rand_index << endl;
     file << "Precision is: " << precision << endl;
     file << "recall is: " << recall << endl;
     file << "f1 measure is: " << f1_measure << endl;

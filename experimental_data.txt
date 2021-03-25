@@ -1,0 +1,94 @@
+Result of Static Rock:
+    Total points: 1000
+    Tot_N: 499500
+    Tot_P: 180613
+    FP is: 0
+    TN is: 425989
+    FN is: 73511
+    TP is: 180613
+    rand index is: 0.891914
+    precision is: 1
+    recall is: 0.710728
+    f1 measure is: 0.830907
+
+50 data points added incrementally at each iteration (Tot_N is Total Negative, Tot_P is Total 
+Positive, FP is False Positive, TN is True Negative, FN is False Negative, TP is True Positive).
+
+Iteration 1:
+    Total points: 1050
+    Tot_N: 550725
+    Tot_P: 184137
+    FP is: 2589
+    TN is: 373565
+    FN is: 177160
+    TP is: 181548
+    rand index is: 0.755398
+    precision is: 0.98594
+    recall is: 0.506116
+    f1 measure is: 0.668876
+
+Iteration 2:
+    Total points: 1100
+    Tot_N: 604450
+    Tot_P: 192587
+    FP is: 8851
+    TN is: 350567
+    FN is: 253883
+    TP is: 183736
+    rand index is: 0.670362
+    precision is: 0.954042
+    recall is: 0.419854
+    f1 measure is: 0.583098
+
+Iteration 3:
+    Total points: 1150
+    Tot_N: 660675
+    Tot_P: 206037
+    FP is: 18679
+    TN is: 330921
+    FN is: 329754
+    TP is: 187358
+    rand index is: 0.597983
+    precision is: 0.909342
+    recall is: 0.362316
+    f1 measure is: 0.518173
+
+Iteration 4:
+    Total points: 1200
+    Tot_N: 719400
+    Tot_P: 224069
+    FP is: 31786
+    TN is: 257038
+    FN is: 462362
+    TP is: 192283
+    rand index is: 0.476244
+    precision is: 0.858142
+    recall is: 0.293721
+    f1 measure is: 0.437646
+
+Iteration 5:
+    Total points: 1250
+    Tot_N: 780625
+    Tot_P: 247419
+    FP is: 47731
+    TN is: 225823
+    FN is: 554802
+    TP is: 199688
+    rand index is: 0.413903
+    precision is: 0.807084
+    recall is: 0.264666
+    f1 measure is: 0.398615
+
+Iteration 6:
+    Total points: 1300
+    Tot_N: 844350
+    Tot_P: 275769
+    FP is: 68264
+    TN is: 199864
+    FN is: 644486
+    TP is: 207505
+    rand index is: 0.363684
+    precision is: 0.752459
+    recall is: 0.243553
+    f1 measure is: 0.367995
+
