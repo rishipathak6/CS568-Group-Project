@@ -3,6 +3,7 @@
 #include <sstream>  //istringstream
 #include <iostream> // cout
 #include <fstream>  // ifstream
+#include <map>      //map
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -19,10 +20,11 @@ public:
     int no_clusters;                       // Number of clusters
     int classes;
 
-    Rock(vector<vector<string>> &dataset, double threshold, int k);
+    Rock(vector<vector<string>> &dataset, double threshold, int k, int flag);
     void create_adjacency_matrix();
     double j_coefficient(vector<string> &data_point1, vector<string> &data_point2);
     void process(int k, vector<vector<int>> &clusters);
+    void load_clusters(string file, vector<vector<int>> &clusters);
     pair<int, int> find_pair_clusters(vector<vector<int>> &global_heap);
     double calculate_goodness(vector<int> &A, vector<int> &B);
     int calculate_links(vector<int> &A, vector<int> &B);
@@ -32,14 +34,18 @@ public:
 };
 
 //Constructor function
-Rock::Rock(vector<vector<string>> &dataset, double threshold, int k)
+Rock::Rock(vector<vector<string>> &dataset, double threshold, int k, int flag)
 {
     data = dataset;
     theta = threshold;
     no_clusters = k;
     create_adjacency_matrix();
-    process(k, clusters);
-    //remove_outliers(clusters);
+if(flag){
+         load_clusters("output\\processed_data.txt", clusters);
+     }
+    else{
+        process(k, clusters);
+     }    
     calculate_accuracy(clusters);
 }
 
@@ -89,6 +95,7 @@ double Rock::j_coefficient(vector<string> &data_point1, vector<string> &data_poi
 void Rock::process(int k, vector<vector<int>> &clusters)
 {
     int len = data.size();
+    bool flag = true;
     // vector<vector<int>> clusters;
     // Initially pushes the data points into a matrix
     for (int i = 0; i < len; i++)
@@ -148,10 +155,15 @@ void Rock::process(int k, vector<vector<int>> &clusters)
                 cluster_no++;
             }
             cout << endl;
-        }
+                }
         else
         {
             break;
+        }
+        if (flag && clusters.size() < 0.1 * data.size())
+        {
+            flag = false;
+            remove_outliers(clusters);
         }
     }
 
@@ -294,27 +306,51 @@ void Rock::remove_outliers(vector<vector<int>> &clusters)
         }
     }
     int bad_cluster_threshold = 0.05 * max_cluster_size;
-    vector<int> bad_cluster_index;
+    map<int, int> bad_cluster;
     int bad_cluster_total_points = 0;
     for (int i = 0; i < clusters.size(); i++)
     {
         if (clusters[i].size() <= bad_cluster_threshold)
         {
-            bad_cluster_index.push_back(i);
+            bad_cluster[i] = clusters[i].size();
             bad_cluster_total_points += clusters[i].size();
         }
     }
 
     if (bad_cluster_total_points > 0.3 * data.size())
     {
-        cout << "The number of bad clusters is greater than 30\% of total clusters" << endl;
+        cout << "The number of points in bad clusters is greater than 30\% of total points" << endl;
     }
     else
     {
-        for (int i = 0; i < bad_cluster_index.size(); i++)
+        int i = 0;
+        cout << "total clusters " << clusters.size() << endl;
+        cout << "total bad clusters are " << bad_cluster.size() << endl;
+
+        cout << "The bad clusters are: " << endl;
+        for (auto itr = bad_cluster.begin(); itr != bad_cluster.end(); ++itr)
         {
-            clusters.erase(clusters.begin() + bad_cluster_index[i] - i);
+            cout << itr->first << " " << itr->second << endl;
+            if (clusters.size() > no_clusters)
+            {
+                cout << clusters[itr->first - i].size() << endl;
+                clusters.erase(clusters.begin() + itr->first - i);
+                i++;
+            }
         }
+        cout << "The clusters after removing outliers are:" << endl;
+        int cluster_no = 1;
+        for (auto x : clusters)
+        {
+            cout << "#" << cluster_no << " ";
+            for (auto y : x)
+            {
+                cout << y << " ";
+            }
+            cout << endl;
+            cluster_no++;
+        }
+        cout << endl;
     }
 }
 
@@ -401,16 +437,17 @@ Incremental::Incremental(Rock &initial_clustering, vector<vector<string>> &new_d
     this->new_data = new_data;
     this->batch_size = batch_size;
     this->no_batches = new_data.size() / batch_size;
+    bool flag = true;
     for (int i = 0; i <= no_batches; i++)
     {
         cout << "--------------------------------" << endl;
         cout << "Batch number: " << i + 1 << endl;
         update_adjacency_matrix(i);
         incremental_process(i);
+        remove_outliers();
         cout << "--------------------------------" << endl
              << endl;
     }
-    //remove_outliers();
     calculate_accuracy();
 }
 
@@ -656,26 +693,37 @@ void Incremental::remove_outliers()
         }
     }
     int bad_cluster_threshold = 0.05 * max_cluster_size;
-    vector<int> bad_cluster_index;
+    map<int, int> bad_cluster;
     int bad_cluster_total_points = 0;
     for (int i = 0; i < initial_clustering.clusters.size(); i++)
     {
         if (initial_clustering.clusters[i].size() <= bad_cluster_threshold)
         {
-            bad_cluster_index.push_back(i);
+            bad_cluster[i] = initial_clustering.clusters[i].size();
             bad_cluster_total_points += initial_clustering.clusters[i].size();
         }
     }
 
     if (bad_cluster_total_points > 0.3 * (initial_clustering.data.size() + new_data.size()))
     {
-        cout << "The number of bad clusters is greater than 30\% of total clusters" << endl;
+        cout << "The number of points in bad clusters is greater than 30\% of total points" << endl;
     }
     else
     {
-        for (int i = 0; i < bad_cluster_index.size(); i++)
+        int i = 0;
+        cout << "total clusters " << initial_clustering.clusters.size() << endl;
+        cout << "total bad clusters are " << bad_cluster.size() << endl;
+
+        cout << "The bad clusters are: " << endl;
+        for (auto itr = bad_cluster.begin(); itr != bad_cluster.end(); ++itr)
         {
-            initial_clustering.clusters.erase(initial_clustering.clusters.begin() + bad_cluster_index[i] - i);
+            cout << itr->first << " " << itr->second << endl;
+
+            if (initial_clustering.clusters.size() > initial_clustering.no_clusters)
+            {
+                initial_clustering.clusters.erase(initial_clustering.clusters.begin() + itr->first - i);
+                i++;
+            }
         }
 
         cout << "The final clusters after removing outliers are:" << endl;
@@ -694,6 +742,49 @@ void Incremental::remove_outliers()
     }
 }
 
+void Rock:: load_clusters(string file, vector<vector<int>> &clusters)
+{
+    ifstream inputFile(file);
+    int l = 0;
+    // Reading the file line by line and breaking it into tokens separated by commas
+    while (inputFile)
+    {
+        l++;
+        string s;
+        if (!getline(inputFile, s))
+            break;
+        if (s[0] != '#')
+        {
+            istringstream ss(s);
+            vector<int> record;
+            while (ss)
+            {
+                string line;
+                if (!getline(ss, line, ' '))
+                    break;
+                try
+                {
+                    record.push_back(stoi(line));
+                }
+                catch (const std::invalid_argument e) // Catching error in the file
+                {
+                    cout << "NaN found in file " << file << " line " << l
+                         << endl;
+                    e.what();
+                }
+            }
+
+            clusters.push_back(record);
+        }
+    }
+    // If file does not exist throw error
+    if (!inputFile.eof())
+    {
+        cerr << "Could not read file " << file << "\n";
+        throw invalid_argument("File not found.");
+    }
+}
+
 int main(int argc, char **argv)
 {
     string file = argv[1];
@@ -701,6 +792,7 @@ int main(int argc, char **argv)
     int no_clusters = stoi(argv[3]);
     string inc_file = argv[4];
     int batch_size = stoi(argv[5]);
+    int flag = stoi(argv[6]);
     ofstream Cout("output\\intermidiate.txt");
     streambuf *coutbuf = cout.rdbuf(); //save old buf
 
@@ -711,7 +803,7 @@ int main(int argc, char **argv)
     cout.rdbuf(Cout.rdbuf());
 
     vector<vector<string>> data = parse2DCsvFile(file); // Reading sample data file
-    Rock rock(data, theta, no_clusters);
+    Rock rock(data, theta, no_clusters, flag);
     vector<vector<bool>> adjacency_matrix = rock.adjacency_matrix;
 
     cout << "Adjacency Matrix: " << endl;
@@ -726,6 +818,15 @@ int main(int argc, char **argv)
     vector<vector<int>> clusters = rock.clusters;
     int cluster_no = 1;
     cout.rdbuf(coutbuf);
+    ofstream output_file("output\\processed_data.txt");
+
+    for (int i = 0; i < clusters.size(); i++)
+    {
+        ostream_iterator<int> output_iterator(output_file, " ");
+        copy(clusters[i].begin(), clusters[i].end(), output_iterator);
+        output_file<<endl;
+    }
+
     ofstream out("output\\clusters.txt");
     cout.rdbuf(out.rdbuf());
 

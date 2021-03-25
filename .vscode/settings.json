@@ -3,6 +3,8 @@
     "iostream": "cpp",
     "vector": "cpp",
     "ostream": "cpp",
-    "utility": "cpp"
+    "utility": "cpp",
+    "fstream": "cpp",
+    "*.tcc": "cpp"
   }
 }
