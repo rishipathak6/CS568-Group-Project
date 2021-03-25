@@ -448,6 +448,7 @@ Incremental::Incremental(Rock &initial_clustering, vector<vector<string>> &new_d
         cout << "--------------------------------" << endl
              << endl;
     }
+    
     calculate_accuracy();
 }
 

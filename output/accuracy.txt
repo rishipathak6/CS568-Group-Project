@@ -1,13 +1,13 @@
-Total points: 300
-Tot_N: 44850
-Tot_P: 17720
+Total points: 1000
+Tot_N: 499500
+Tot_P: 171505
 FP is: 0
-TN is: 38864
-FN is: 5986
-TP is: 17720
-rand index is: 0.904331
+TN is: 419146
+FN is: 80354
+TP is: 171505
+rand index is: 0.880248
 precision is: 1
-recall is: 0.74749
-f1 measure is: 0.855501
+recall is: 0.680956
+f1 measure is: 0.810201
 
 Number of outliers are: 0

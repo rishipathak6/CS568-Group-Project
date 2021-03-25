@@ -1,13 +1,13 @@
-Total points: 300
-Tot_N: 44850
-Tot_P: 17720
-FP is: 0
-TN is: 38174
-FN is: 6676
-TP is: 17720
-rand index is: 0.893304
-Precision is: 1
-recall is: 0.726349
-f1 measure is: 0.841485
+Total points: 1300
+Tot_N: 844350
+Tot_P: 239583
+FP is: 617
+TN is: 584332
+FN is: 260018
+TP is: 238966
+rand index is: 0.759547
+Precision is: 0.997425
+recall is: 0.478905
+f1 measure is: 0.647107
 
 Number of outliers are: 0

@@ -92,3 +92,96 @@ Iteration 6:
     recall is: 0.243553
     f1 measure is: 0.367995
 
+Result of Static Rock:
+    Total points: 1000
+    Tot_N: 499500
+    Tot_P: 171505
+    FP is: 0
+    TN is: 419146
+    FN is: 80354
+    TP is: 171505
+    rand index is: 0.880248
+    precision is: 1
+    recall is: 0.680956
+    f1 measure is: 0.810201
+
+50 data points added incrementally at each iteration (Tot_N is Total Negative, Tot_P is Total 
+Positive, FP is False Positive, TN is True Negative, FN is False Negative, TP is True Positive).
+
+Iteration 1:
+    Total points: 1050
+    Tot_N: 550725
+    Tot_P: 171505
+    FP is: 0
+    TN is: 431603
+    FN is: 119122
+    TP is: 171505
+    rand index is: 0.835064
+    Precision is: 1
+    recall is: 0.590121
+    f1 measure is: 0.742234
+
+Iteration 2:
+    Total points: 1100
+    Tot_N: 604450
+    Tot_P: 171728
+    FP is: 0
+    TN is: 463224
+    FN is: 141226
+    TP is: 171728
+    rand index is: 0.818049
+    Precision is: 1
+    recall is: 0.548732
+    f1 measure is: 0.708621
+
+Iteration 3:
+    Total points: 1150
+    Tot_N: 660675
+    Tot_P: 193285
+    FP is: 0
+    TN is: 511059
+    FN is: 149616
+    TP is: 193285
+    rand index is: 0.824797
+    Precision is: 1
+    recall is: 0.563676
+    f1 measure is: 0.720963
+
+Iteration 4:
+    Total points: 1200
+    Tot_N: 719400
+    Tot_P: 215031
+    FP is: 0
+    TN is: 560270
+    FN is: 159130
+    TP is: 215031
+    rand index is: 0.829704
+    Precision is: 1
+    recall is: 0.574702
+    f1 measure is: 0.729918
+
+Iteration 5:
+    Total points: 1250
+    Tot_N: 780625
+    Tot_P: 235999
+    FP is: 0
+    TN is: 610501
+    FN is: 170124
+    TP is: 235999
+    rand index is: 0.832658
+    Precision is: 1
+    recall is: 0.581102
+    f1 measure is: 0.73506
+
+Iteration 6:
+    Total points: 1300
+    Tot_N: 844350
+    Tot_P: 239583
+    FP is: 617
+    TN is: 584332
+    FN is: 260018
+    TP is: 238966
+    rand index is: 0.759547
+    Precision is: 0.997425
+    recall is: 0.478905
+    f1 measure is: 0.647107
